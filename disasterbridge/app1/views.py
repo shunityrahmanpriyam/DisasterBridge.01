@@ -13,7 +13,7 @@ def login_view(request):
         if user:
             login(request, user)
             return redirect("dashboard")
-    return render(request, "login.html")
+    return render(request, "app1/login.html")
 
 def signup_view(request):
-    return render(request, "signup.html")
+    return render(request, "app1/signup.html")
