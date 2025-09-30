@@ -98,3 +98,14 @@ def logout_view(request):
 
 def donationinfo(request):
     return render(request, "core/donation_info.html")
+
+
+
+def about_page(request):
+    return render(request, "core/about.html")
+
+def contact_page(request):
+    return render(request, "core/contact.html")
+
+def faq_page(request):
+    return render(request, "core/faq.html")
