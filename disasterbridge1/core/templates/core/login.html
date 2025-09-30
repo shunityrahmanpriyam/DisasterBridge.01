@@ -1,28 +1,326 @@
-{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In - DisasterBridge</title>
+    <!-- Load Bootstrap 5 CSS and Tailwind via CDN for utility classes -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
-        body { font-family: Arial, sans-serif; background: #f0f2f5; }
-        .container { width: 400px; margin: 80px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h2 { text-align: center; margin-bottom: 20px; }
-        form { display: flex; flex-direction: column; }
-        input { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-        button { background: #007bff; color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        p { text-align: center; margin-top: 10px; }
+        /* Reusing common styles from signup.html for consistency */
+        body {
+            background-color: #ffecec; /* Light pink background */
+            color: #1f2937; /* Dark text color */
+            font-family: 'Inter', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navbar {
+            background: transparent;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            font-weight: bold;
+            margin: 0 12px;
+            padding: 8px 0;
+            color: black !important;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            border-bottom: 2px solid transparent;
+        }
+        /* Active Link Styling: Highlight LOG IN */
+        .nav-link.active {
+            color: #e63946 !important;
+            border-bottom: 2px solid #e63946;
+        }
+        .nav-link:hover {
+            color: #ff4d4d !important;
+        }
+        .navbar-brand {
+            color: #e63946 !important;
+            font-size: 1.25rem;
+        }
+
+        /* Login Card Styling (Central container) */
+        .login-card {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 450px; /* Slightly narrower than signup to match the image layout */
+            width: 90%;
+            margin: 50px auto;
+            text-align: center;
+        }
+
+        /* Custom Input Groups - Specific for Login with icon */
+        .custom-input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        .custom-input-group input {
+            width: 100%;
+            padding: 12px 20px 12px 50px; /* Increased left padding for icon */
+            border-radius: 30px;
+            border: 1px solid #ffcccc;
+            background-color: #fff0f0;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .custom-input-group input:focus {
+            border-color: #e63946;
+            background-color: white;
+        }
+        .custom-input-group .input-icon {
+            position: absolute;
+            top: 50%;
+            left: 18px;
+            transform: translateY(-50%);
+            color: #e63946; /* Icon color */
+            font-size: 1.2rem;
+        }
+
+        /* Primary Button Style (Log In) */
+        .btn-primary-red {
+            background-color: #e63946;
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 10px rgba(230, 57, 70, 0.4);
+        }
+        .btn-primary-red:hover {
+            background-color: #ff4d4d;
+            box-shadow: 0 6px 15px rgba(230, 57, 70, 0.5);
+        }
+
+        /* Social Login Buttons (New) */
+        .btn-social {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            background-color: white;
+            transition: background-color 0.2s;
+            font-size: 0.95rem;
+            color: #1f2937 !important; /* Ensure text color is dark */
+            text-decoration: none; /* Remove underline from link */
+        }
+        .btn-social img {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .btn-social:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Specific styling for the new Sign Up button to match the overall design */
+        .btn-signup-link {
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 500;
+            border: 1px solid #e63946; /* Red border */
+            background-color: #ffecec; /* Light pink background */
+            color: #e63946 !important; /* Red text */
+            transition: background-color 0.2s, color 0.2s;
+            width: 100%; /* Make it full width like the other main buttons */
+            text-decoration: none; /* Remove underline */
+            display: block; /* Make the link behave like a block element for full width */
+            text-align: center;
+        }
+        .btn-signup-link:hover {
+            background-color: #e63946;
+            color: white !important;
+        }
+
+
+        /* Checkbox and Forgot Password styling */
+        .form-check-label, .forgot-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .forgot-link {
+            color: #e63946 !important;
+            text-decoration: none;
+        }
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+        .form-check-input:checked {
+            background-color: #e63946;
+            border-color: #e63946;
+        }
+
+        /* Footer Styling (Reused) */
+        footer {
+            background: #ffecec;
+            padding: 2rem 0 1rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .footer-link, .text-link, .text-danger-custom {
+            color: #e63946 !important;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-link:hover, .text-link:hover, .text-danger-custom:hover {
+            color: #ff4d4d !important;
+        }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h2>Login</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
-        <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+<body class="d-flex flex-column">
+
+<!-- Navbar (Updated for Log In) -->
+<nav class="navbar sticky-top py-3">
+    <div class="container-xl d-flex justify-content-between">
+        <!-- Logo link -->
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="home.html">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2" style="color: #e63946;">
+                <path d="M12 2L2 12L12 22L22 12L12 2Z" fill="currentColor"/>
+                <path d="M12 5.5L5.5 12L12 18.5L18.5 12L12 5.5Z" fill="#ffffff"/>
+            </svg>
+            Disaster<span class="fw-normal">Bridge</span>
+        </a>
+
+        <!-- Links container -->
+        <div class="d-flex align-items-center">
+           <a href="/" class="nav-link">HOME</a>
+            <a href="login.html" class="nav-link active">LOG IN</a>
+        </div>
     </div>
+</nav>
+
+<!-- Main Content Section: Log In Form -->
+<section class="flex-grow-1 d-flex align-items-center py-5">
+    <div class="login-card">
+        <h3 class="card-title text-center text-dark fw-bold mb-4">LOG IN AS</h3>
+
+        <form onsubmit="event.preventDefault(); handleLogin();">
+            <!-- Username/Email Input -->
+            <div class="custom-input-group">
+                <i class="bi bi-person input-icon"></i>
+                <input type="text" id="username" placeholder="Username" required>
+            </div>
+
+            <!-- Password Input -->
+            <div class="custom-input-group">
+                <i class="bi bi-lock input-icon"></i>
+                <input type="password" id="password" placeholder="Password" required>
+            </div>
+
+            <!-- Remember Me & Forgot Password -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe">
+                    <label class="form-check-label" for="rememberMe">
+                        Remember Me
+                    </label>
+                </div>
+                <div>
+                    <!-- Assuming you will create a forgot password page eventually -->
+                    <a href="/forgot" class="forgot-link">Forgot Password?</a>
+                </div>
+            </div>
+
+            <!-- Log In Button -->
+            <button type="submit" class="btn-primary-red mb-3">LOG IN</button>
+        </form>
+
+        <!-- OR Log In With Separator -->
+        <p class="text-muted small mb-3">or log in with</p>
+
+        <!-- Social Login Buttons (Google and Apple) -->
+        <div class="row gx-2 mb-4">
+            <div class="col-6">
+                <button type="button" class="btn-social w-100" onclick="handleSocialLogin('Google')">
+                    <!-- Google Icon (Inline SVG or Image URL) -->
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_and_wordmark_with_transparent_background.png" alt="Google icon">
+                    Google Account
+                </button>
+            </div>
+            <div class="col-6">
+                <button type="button" class="btn-social w-100" onclick="handleSocialLogin('Apple')">
+                    <!-- Apple Icon (Inline SVG for better quality) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-apple me-2" viewBox="0 0 16 16">
+                        <path d="M11.109 0C13.203 0 15 1.797 15 3.891c0 2.215-1.554 4.092-3.834 4.103-1.638.008-2.673-.974-3.415-.974-.74 0-1.956.974-3.414.974C1.554 7.983 0 6.096 0 3.891 0 1.797 1.797 0 3.891 0c1.789 0 3.197.94 4.073.94.878 0 2.288-.94 4.073-.94zM7.5 16c.72 0 1.706-.576 2.768-.564 1.353.015 2.585.882 3.424.878.84 0 1.545-.58 1.545-1.307 0-.91-.703-1.472-1.745-1.472-1.045 0-1.895.845-2.748.845-.852 0-1.897-.845-2.748-.845-1.043 0-1.745.562-1.745 1.472 0 .727.705 1.307 1.545 1.307z"/>
+                    </svg>
+                    Apple
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Sign Up Link converted to a visually distinct button -->
+        <p class="text-muted small mb-3">
+            <a href="signup.html" class="btn-signup-link">
+                No account? Sign Up here!
+            </a>
+        </p>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="container-xl">
+        <!-- Navigation Buttons -->
+        <div class="mb-3">
+            <!-- Corrected footer links to use explicit root paths -->
+            <a href="/about" class="footer-btn active">ABOUT</a> |
+            <a href="/contact" class="footer-btn">CONTACT INFO</a> |
+            <a href="/faq" class="footer-btn">HELP/FAQ</a>
+        </div>
+
+        <!-- Social Media Buttons (Reused from signup.html) -->
+        <div class="mb-3">
+            <a href="https://facebook.com/disasterbridge" target="_blank" class="text-link me-3" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/disasterbridge" target="_blank" class="text-link me-3" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://twitter.com/disasterbridge" target="_blank" class="text-link me-3" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+            <a href="https://linkedin.com/company/disasterbridge" target="_blank" class="text-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        </div>
+
+        <!-- Legal (Reused from signup.html) -->
+        <p class="text-muted small mb-0">
+            &copy; 2025 DisasterBridge. All rights reserved. <br>
+            <a href="/privacy" class="text-danger-custom">Privacy Policy</a> | <a href="/terms" class="text-danger-custom">Terms of Service</a>
+        </p>
+    </div>
+</footer>
+
+<!-- JavaScript for handling form submission -->
+<script>
+    function handleLogin() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const rememberMe = document.getElementById('rememberMe').checked;
+
+        // Placeholder for actual API call
+        console.log(`Attempting login for: ${username}`);
+        console.log(`Remember Me: ${rememberMe}`);
+
+        // If successful, you would redirect the user here.
+    }
+
+    function handleSocialLogin(provider) {
+        console.log(`Attempting social login with: ${provider}`);
+        // Placeholder for social login redirect/popup logic
+    }
+</script>
+
+<!-- Load Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
