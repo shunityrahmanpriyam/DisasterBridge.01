@@ -1,12 +1,322 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us - DisasterBridge</title>
+    <!-- Load Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Load Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <style>
+        /* Custom styles: Shared look for all pages (light pink background and red accents) */
+        body {
+            background-color: #ffecec; /* Light pink background */
+            color: #1f2937; /* Dark text color */
+            font-family: 'Inter', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styling (Identical to Home/FAQ) */
+        .navbar {
+            background: transparent;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            font-weight: bold;
+            margin: 0 12px;
+            padding: 8px 0;
+            color: black !important;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            border-bottom: 2px solid transparent;
+        }
+        /* No link is active in main nav, active class kept for reference */
+        .nav-link.active {
+            color: #e63946 !important;
+            border-bottom: 2px solid #e63946;
+        }
+        .nav-link:hover {
+            color: #ff4d4d !important;
+        }
+
+        /* Logo Styling */
+        .navbar-brand {
+            color: #e63946 !important;
+            font-size: 1.25rem;
+        }
+
+        /* Login Button Styling */
+        .btn-login {
+            background-color: #e63946;
+            color: white;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-weight: bold;
+            border: none;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.875rem;
+        }
+        .btn-login:hover {
+            background-color: #c0313d;
+            color: white;
+        }
+
+        /* Contact Section Styling */
+        .contact-section {
+            padding: 3rem 1rem;
+            flex-grow: 1;
+            text-align: center;
+        }
+        .contact-section h1 {
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            color: #e63946;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Contact Info Styling */
+        .contact-info {
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            line-height: 1.5;
+        }
+
+        /* Form Card Styling */
+        .feedback-card {
+            background-color: #fcebeb; /* Slightly darker pink for the card area */
+            border-radius: 12px;
+            padding: 30px 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .feedback-card label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #1f2937;
+        }
+
+        .feedback-card .form-control {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 15px;
+            /* Input background color matching body background */
+            background-color: #ffecec;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .feedback-card .btn-send {
+            background-color: #e63946;
+            color: white;
+            border-radius: 8px;
+            padding: 8px 30px;
+            font-weight: bold;
+            border: none;
+            transition: background-color 0.2s;
+        }
+        .feedback-card .btn-send:hover {
+            background-color: #c0313d;
+        }
+
+        /* Footer Styling (Identical to Home/FAQ) */
+        footer {
+            background: #ffecec;
+            padding: 2rem 0 1rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .footer-btn, .social-btn, .text-danger {
+            color: #e63946 !important;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        /* Footer active links are NOT active on the home page */
+        .footer-btn.active {
+             color: #e63946 !important;
+        }
+        .footer-btn:hover, .social-btn:hover, .text-danger:hover {
+            color: #ff4d4d !important;
+        }
+
+        /* Custom Message Box for Form Submission */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1050; /* Above Bootstrap's standard z-index */
+            max-width: 90%;
+            text-align: center;
+            display: none; /* Initially hidden */
+            border-top: 5px solid #e63946;
+        }
+        .message-box .btn-close-msg {
+            background-color: #e63946;
+            color: white;
+            border-radius: 6px;
+            padding: 6px 15px;
+            margin-top: 15px;
+            font-weight: 500;
+            border: none;
+        }
+    </style>
 </head>
-<body>
-    <h1>Contact Information</h1>
-    <p>Email: support@disasterbridge.com</p>
-    <p>Phone: +880 1234 567890</p>
-    <p>Address: Dhaka, Bangladesh</p>
+<body class="d-flex flex-column">
+
+<!-- Navbar - Non-collapsing, desktop-style for all views -->
+<nav class="navbar">
+    <div class="container-xl d-flex">
+        <!-- Logo link: Set to explicit root path (/) -->
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+            <!-- Custom Logo SVG placeholder -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2" style="color: #e63946;">
+                <path d="M12 2L2 12L12 22L22 12L12 2Z" fill="currentColor"/>
+                <path d="M12 5.5L5.5 12L12 18.5L18.5 12L12 5.5Z" fill="#ffffff"/>
+            </svg>
+            Disaster<span class="fw-normal">Bridge</span>
+        </a>
+
+        <!-- Links container always visible and aligned right -->
+        <div class="d-flex align-items-center ms-auto">
+            <!-- Home Link: Set to explicit root path (/) -->
+            <a href="/" class="nav-link">HOME</a>
+            <!-- Corrected link for 'REQUEST HELP' -->
+            <a href="/request-help" class="nav-link">REQUEST HELP</a>
+            <!-- Corrected link for 'DONATE' (Set to /donatenow based on chat history clarification) -->
+            <a href="/donationinfo" class="nav-link">DONATE</a>
+            <!-- Corrected link for 'VOLUNTEER' -->
+            <a href="/volunteer" class="nav-link">VOLUNTEER</a>
+            <!-- Corrected link for 'SIGN IN/LOGIN' -->
+            <a href="/login" class="btn-login ms-3">SIGN IN/ LOGIN</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Contact Us Section -->
+<section class="contact-section container-lg">
+    <h1 class="display-5 text-uppercase">CONTACT US</h1>
+
+    <!-- Contact Info -->
+    <div class="contact-info">
+        74/A, Green Road, Dhaka - 1205, Bangladesh <br>
+        info@cleantrackplus.com <br>
+        (123) 456-7890
+    </div>
+
+    <!-- Submit Feedback Form -->
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="feedback-card">
+                <h3 class="mb-4 fw-bold">Submit Feedback:</h3>
+                <!-- Added ID for JavaScript handling -->
+                <form id="feedbackForm">
+                    <div class="mb-4">
+                        <label for="nameInput">Name:</label>
+                        <input type="text" class="form-control" id="nameInput" placeholder="" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="emailInput">Email:</label>
+                        <input type="email" class="form-control" id="emailInput" placeholder="" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="messageInput">Message:</label>
+                        <textarea class="form-control" id="messageInput" rows="5" placeholder="" required></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn-send">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Message Box for Success/Error feedback (Alternative to alert()) -->
+<div id="messageBox" class="message-box">
+    <h4 id="messageTitle" class="fw-bold text-success mb-2"></h4>
+    <p id="messageText" class="text-muted"></p>
+    <button class="btn-close-msg" onclick="document.getElementById('messageBox').style.display='none'">Close</button>
+</div>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="container-xl">
+        <!-- Navigation Buttons -->
+        <div class="mb-3">
+            <!-- Corrected footer links to use explicit root paths -->
+            <a href="/about" class="footer-btn">ABOUT</a> |
+            <a href="/contact" class="footer-btn active">CONTACT INFO</a> |
+            <a href="/faq" class="footer-btn">HELP/FAQ</a>
+        </div>
+
+        <!-- Social Media Buttons -->
+        <div class="mb-3">
+            <a href="https://facebook.com/disasterbridge" target="_blank" class="social-btn" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/disasterbridge" target="_blank" class="social-btn" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://twitter.com/disasterbridge" target="_blank" class="social-btn" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+            <a href="https://linkedin.com/company/disasterbridge" target="_blank" class="social-btn" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        </div>
+
+        <!-- Legal -->
+        <p class="text-muted small mb-0">
+            &copy; 2025 DisasterBridge. All rights reserved. <br>
+            <!-- Corrected legal links to use explicit root paths -->
+            <a href="/privacy" class="text-danger">Privacy Policy</a> | <a href="/terms" class="text-danger">Terms of Service</a>
+        </p>
+    </div>
+</footer>
+
+<!-- Load Bootstrap 5 JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // JavaScript to handle form submission and display a non-alert message
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('feedbackForm');
+        const messageBox = document.getElementById('messageBox');
+        const messageTitle = document.getElementById('messageTitle');
+        const messageText = document.getElementById('messageText');
+
+        if (form) {
+            form.addEventListener('submit', function(event) {
+                // Prevent the default form submission (which causes a page reload)
+                event.preventDefault();
+
+                // Here you would typically send the data to a server
+                console.log("Feedback Submitted!");
+
+                // Display custom success message
+                messageTitle.textContent = "Thank You!";
+                messageText.textContent = "Your feedback has been received. We appreciate you reaching out to us.";
+                // Ensure the box is styled correctly before showing
+                messageTitle.classList.remove('text-danger');
+                messageTitle.classList.add('text-success');
+
+                // Show the message box
+                messageBox.style.display = 'block';
+
+                // Optional: Reset the form fields
+                form.reset();
+            });
+        }
+    });
+</script>
 </body>
 </html>

@@ -1,17 +1,233 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>FAQ - DisasterBridge</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & FAQ - DisasterBridge</title>
+    <!-- Load Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Load Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <style>
+        /* Custom styles: Shared look for all pages (light pink background and red accents) */
+        body {
+            background-color: #ffecec; /* Light pink background */
+            color: #1f2937; /* Dark text color */
+            font-family: 'Inter', Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styling (Identical to About) */
+        .navbar {
+            background: transparent;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .nav-link {
+            font-weight: bold;
+            margin: 0 12px;
+            padding: 8px 0;
+            color: black !important;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+            border-bottom: 2px solid transparent;
+        }
+        /* Active Link Styling (Active on the HELP/FAQ page) */
+        .nav-link.active {
+            color: #e63946 !important;
+            border-bottom: 2px solid #e63946;
+        }
+        .nav-link:hover {
+            color: #ff4d4d !important;
+        }
+
+        /* Logo Styling */
+        .navbar-brand {
+            color: #e63946 !important;
+            font-size: 1.25rem;
+        }
+
+        /* Login Button Styling */
+        .btn-login {
+            background-color: #e63946;
+            color: white;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-weight: bold;
+            border: none;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.875rem;
+        }
+        .btn-login:hover {
+            background-color: #c0313d;
+            color: white;
+        }
+
+        /* FAQ Section Styling */
+        .faq-section {
+            padding: 3rem 1rem;
+            flex-grow: 1;
+        }
+        .faq-section h1 {
+            font-weight: 900;
+            margin-bottom: 3rem; /* Increased margin to match visual spacing */
+            color: #e63946;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+
+        /* Styling for the Q&A text structure */
+        .qa-item {
+            margin-bottom: 1.75rem; /* Space between Q&A blocks */
+            line-height: 1.6;
+        }
+        .qa-question {
+            font-weight: bold;
+            color: #1f2937; /* Dark text for the question */
+            font-size: 1.05rem;
+            margin-bottom: 0.25rem;
+        }
+        .qa-answer {
+            color: #1f2937; /* Dark text for the answer */
+            font-size: 1.05rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Footer Styling (Identical to About) */
+        footer {
+            background: #ffecec;
+            padding: 2rem 0 1rem;
+            font-size: 0.9rem;
+            margin-top: auto;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .footer-btn, .social-btn, .text-danger {
+            color: #e63946 !important;
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-btn.active {
+             color: #e63946 !important;
+        }
+        .footer-btn:hover, .social-btn:hover, .text-danger:hover {
+            color: #ff4d4d !important;
+        }
+    </style>
 </head>
-<body>
-    <h1>Frequently Asked Questions</h1>
-    <h3>1. How do I request aid?</h3>
-    <p>You need to sign up as a victim and submit an aid request from your dashboard.</p>
+<body class="d-flex flex-column">
 
-    <h3>2. How can I donate?</h3>
-    <p>Sign up as a donor and navigate to the donation page to contribute.</p>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="container-xl d-flex">
+        <!-- Logo link: Set to explicit root path (/) -->
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
+            <!-- Custom Logo SVG placeholder -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2" style="color: #e63946;">
+                <path d="M12 2L2 12L12 22L22 12L12 2Z" fill="currentColor"/>
+                <path d="M12 5.5L5.5 12L12 18.5L18.5 12L12 5.5Z" fill="#ffffff"/>
+            </svg>
+            Disaster<span class="fw-normal">Bridge</span>
+        </a>
 
-    <h3>3. Can volunteers register?</h3>
-    <p>Yes, volunteers can sign up and access their dashboard for available tasks.</p>
+        <!-- Links container always visible and aligned right -->
+        <div class="d-flex align-items-center ms-auto">
+            <!-- Home Link -->
+            <a href="/" class="nav-link">HOME</a>
+            <!-- Corrected link for 'REQUEST HELP' -->
+            <a href="/request-help" class="nav-link">REQUEST HELP</a>
+            <!-- Corrected link for 'DONATE' (Set to /donatenow) -->
+            <a href="/donationinfo" class="nav-link">DONATE</a>
+            <!-- Corrected link for 'VOLUNTEER' -->
+            <a href="/volunteer" class="nav-link">VOLUNTEER</a>
+            <!-- Corrected link for 'SIGN IN/LOGIN' -->
+            <a href="/login" class="btn-login ms-3">SIGN IN/ LOGIN</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Help & FAQ Section -->
+<section class="faq-section container-lg">
+    <h1 class="display-5 text-uppercase">Help & FAQ</h1>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <!-- Q1: How do I request aid? -->
+            <div class="qa-item">
+                <div class="qa-question">Q1: How do I request aid?</div>
+                <div class="qa-answer">A: Navigate to the Request Aid page, fill in your location, category of aid, urgency, and additional details. Submit, and you'll receive a unique Request ID for tracking.</div>
+            </div>
+
+            <!-- Q2: Can I donate without creating an account? -->
+            <div class="qa-item">
+                <div class="qa-question">Q2: Can I donate without creating an account?</div>
+                <div class="qa-answer">A: Yes, donors can make contributions as a guest, but creating an account helps you track donations and receive updates.</div>
+            </div>
+
+            <!-- Q3: Who can volunteer? -->
+            <div class="qa-item">
+                <div class="qa-question">Q3: Who can volunteer?</div>
+                <div class="qa-answer">A: Anyone willing to help can sign up as a volunteer. You can choose tasks based on your skills and availability.</div>
+            </div>
+
+            <!-- Q4: How is my personal information used? -->
+            <div class="qa-item">
+                <div class="qa-question">Q4: How is my personal information used?</div>
+                <div class="qa-answer">A: We prioritize privacy. Your information is only used to connect you with aid, volunteers, or relevant updates and is not shared with third parties.</div>
+            </div>
+
+            <!-- Q5: How do I track my aid request or donation? -->
+            <div class="qa-item">
+                <div class="qa-question">Q5: How do I track my aid request or donation?</div>
+                <div class="qa-answer">A: Each request or donation generates a unique ID. Enter it on the platform to see status updates and progress.</div>
+            </div>
+
+            <!-- Q6: Is there a helpline for urgent cases? -->
+            <div class="qa-item">
+                <div class="qa-question">Q6: Is there a helpline for urgent cases?</div>
+                <div class="qa-answer">A: Yes, the platform provides emergency contact numbers and live support for high-priority situations.</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="container-xl">
+        <!-- Navigation Buttons -->
+        <div class="mb-3">
+            <!-- Corrected footer links to use explicit root paths -->
+            <a href="/about" class="footer-btn">ABOUT</a> |
+            <a href="/contact" class="footer-btn">CONTACT INFO</a> |
+            <!-- HELP/FAQ link is active on this page -->
+            <a href="/faq" class="footer-btn active">HELP/FAQ</a>
+        </div>
+
+        <!-- Social Media Buttons -->
+        <div class="mb-3">
+            <a href="https://facebook.com/disasterbridge" target="_blank" class="social-btn" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/disasterbridge" target="_blank" class="social-btn" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://twitter.com/disasterbridge" target="_blank" class="social-btn" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+            <a href="https://linkedin.com/company/disasterbridge" target="_blank" class="social-btn" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        </div>
+
+        <!-- Legal -->
+        <p class="text-muted small mb-0">
+            &copy; 2025 DisasterBridge. All rights reserved. <br>
+            <!-- Corrected legal links to use explicit root paths -->
+            <a href="/privacy" class="text-danger">Privacy Policy</a> | <a href="/terms" class="text-danger">Terms of Service</a>
+        </p>
+    </div>
+</footer>
+
+<!-- Load Bootstrap 5 JS Bundle (required for functionality, though none is custom here) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
