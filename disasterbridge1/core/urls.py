@@ -30,6 +30,7 @@ path('signup/', views.signup_view, name='signup'),
 
     path("donationinfo/", views.donationinfo, name="donationinfo"),
 
+
     path("about/", views.about_page, name="about"),
     path("contact/", views.contact_page, name="contact"),
     path("faq/", views.faq_page, name="faq"),
