@@ -26,11 +26,21 @@ class User(AbstractBaseUser, PermissionsMixin):
         ("admin", "Admin"),
     ]
 
+    LANGUAGE_CHOICES = [
+        ('en', 'English'),
+        ('bn', 'Bangla'),
+    ]
+
+
     email = models.EmailField(unique=True)
     phone_number = models.CharField(max_length=15, unique=True)
     name = models.CharField(max_length=100)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
-    language_preference = models.CharField(max_length=20, null=True, blank=True)
+    # language_preference = models.CharField(max_length=20, null=True, blank=True)
+    language_preference = models.CharField(
+        max_length=10,
+        choices=LANGUAGE_CHOICES,
+        default='en')
     verification_status = models.BooleanField(default=False)
     date_registered = models.DateTimeField(auto_now_add=True)
 

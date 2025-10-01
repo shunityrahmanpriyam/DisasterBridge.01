@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f8f9fa;
+        }
+
+        /* Top Navbar */
+        nav.navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+        }
+        nav.navbar .logo {
+            display: flex;
+            align-items: center;
+        }
+        nav.navbar .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        nav.navbar .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+        nav.navbar .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 200px;
+            background: #343a40;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+        }
+        .sidebar a:hover {
+            background: #495057;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        /* Profile section */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .profile-header h2 {
+            color: #007bff;
+            font-size: 28px;
+            margin: 10px 0;
+        }
+
+        .profile-info {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .profile-info table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .profile-info th, .profile-info td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .profile-info th {
+            width: 200px;
+            background: #f1f1f1;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .profile-info tr:hover {
+            background: #f9f9f9;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="{% static 'core/logo.png' %}" alt="Logo">
+            <span>DisasterBridge</span>
+        </div>
+        <div class="nav-links">
+            <a href="{% url 'user_profile' %}">Profile</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="#">Help</a>
+            <a href="{% url 'change_language' %}">Change Language</a>
+            <a href="{% url 'notification_list' %}">Notifications</a>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="main-content">
+            <div class="profile-header">
+                <h2>Welcome, {{ user.name }}</h2>
+            </div>
+             <div class="profile-info">
+                <table>
+                    <tr>
+                        <th>User ID</th>
+                        <td>{{ user.user_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>{{ user.phone_number }}</td>
+                    </tr>
+                    <tr>
+                        <th>Role</th>
+                        <td>{{ user.get_role_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>Language</th>
+                        <td>{{ user.language_preference|default:"Not set" }}</td>
+                    </tr>
+                    <tr>
+                        <th>Verified</th>
+                        <td>{{ user.verification_status }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Registered</th>
+                        <td>{{ user.date_registered }}</td>
+                    </tr>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</body>
+</html>

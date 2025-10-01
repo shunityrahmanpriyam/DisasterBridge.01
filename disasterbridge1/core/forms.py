@@ -17,3 +17,10 @@ class LoginForm(forms.Form):
     username = forms.CharField(label="Email or Phone", max_length=100)
     password = forms.CharField(widget=forms.PasswordInput)
 
+class LanguageForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['language_preference']
+        widgets = {
+            'language_preference': forms.Select(attrs={'class': 'form-control'})
+        }

@@ -19,6 +19,9 @@ urlpatterns = [
 
     # Notification
     path("notifications/", views.notification_list, name="notification_list"),
+    path("notifications/add/", views.add_notification, name="add_notification"),
+    path("notifications/delete/<int:notif_id>/", views.delete_notification, name="delete_notification"),
+    path("notifications/mark/<int:notif_id>/", views.mark_as_read, name="mark_as_read"),
 
     # VolunteerAssignment
     path("assignments/", views.volunteerassignment_list, name="volunteerassignment_list"),
@@ -34,6 +37,11 @@ path('signup/', views.signup_view, name='signup'),
     path("about/", views.about_page, name="about"),
     path("contact/", views.contact_page, name="contact"),
     path("faq/", views.faq_page, name="faq"),
+
+# 1oct
+path("profile/", views.user_profile, name="user_profile"),
+path('change-language/', views.change_language, name='change_language'),
+path("dashboard/", views.dashboard, name="dashboard"),
 
 
 ]

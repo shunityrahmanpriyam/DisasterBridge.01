@@ -1,11 +1,14 @@
-from django.shortcuts import render, get_object_or_404
-from .models import User, AidRequest, Donation, Feedback, Notification, VolunteerAssignment
+from django.shortcuts import render, redirect,get_object_or_404
+from .models import User, AidRequest, Donation, Feedback,  VolunteerAssignment
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.db.models import Q
 from .forms import SignUpForm, LoginForm
-
+from django.contrib.auth.decorators import login_required, user_passes_test
+# 30sept
+from .forms import LanguageForm
+from .models import Notification
 
 def home(request):
     return render(request, 'core/home.html')
@@ -40,10 +43,53 @@ def feedback_list(request):
 
 
 # ==== NOTIFICATION ====
+def is_admin(user):
+    return user.is_authenticated and user.role == 'Admin'
+
+@login_required
 def notification_list(request):
-    notifications = Notification.objects.all()
+    if request.user.role == "Admin":
+
+        notifications = Notification.objects.all().order_by("-timestamp")
+    else:
+
+        notifications = Notification.objects.filter(user=request.user).order_by("-timestamp")
+
     return render(request, "core/notification_list.html", {"notifications": notifications})
 
+
+@login_required
+@user_passes_test(is_admin)
+def add_notification(request):
+    if request.method == "POST":
+        message = request.POST.get("message")
+        notif_type = request.POST.get("type")
+
+
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        users = User.objects.exclude(role="Admin")
+        for u in users:
+            Notification.objects.create(user=u, message=message, type=notif_type)
+
+        return redirect("notification_list")
+    return render(request, "core/add_notification.html")
+
+
+@login_required
+@user_passes_test(is_admin)
+def delete_notification(request, notif_id):
+    notif = get_object_or_404(Notification, notification_id=notif_id)
+    notif.delete()
+    return redirect("notification_list")
+
+
+@login_required
+def mark_as_read(request, notif_id):
+    notif = get_object_or_404(Notification, notification_id=notif_id, user=request.user)
+    notif.status = "read"
+    notif.save()
+    return redirect("notification_list")
 
 # ==== VOLUNTEER ASSIGNMENT ====
 def volunteerassignment_list(request):
@@ -82,7 +128,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Welcome {user.name}!")
-                return redirect("home")
+                return redirect("user_profile")
             else:
                 messages.error(request, "Invalid login credentials")
     else:
@@ -109,3 +155,50 @@ def contact_page(request):
 
 def faq_page(request):
     return render(request, "core/faq.html")
+# 30sept
+
+@login_required
+def user_profile(request):
+    user = request.user  # current logged-in user
+
+    # Get notifications
+    if user.role == "Admin":
+        notifications = Notification.objects.all().order_by("-timestamp")
+    else:
+        notifications = Notification.objects.filter(user=user).order_by("-timestamp")
+
+    return render(request, "core/user_profile.html", {
+        "user": user,
+        "notifications": notifications
+    })
+
+
+def change_language(request):
+    if request.method == "POST":
+        form = LanguageForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Language updated successfully!")
+            return redirect('user_profile')
+    else:
+        form = LanguageForm(instance=request.user)
+
+    return render(request, "core/change_language.html", {"form": form})
+
+@login_required
+def dashboard(request):
+    user = request.user
+
+    # role wise template select
+    if user.role == "admin":
+        template = "core/dashboard_admin.html"
+    elif user.role == "donor":
+        template = "core/dashboard_donor.html"
+    elif user.role == "volunteer":
+        template = "core/dashboard_volunteer.html"
+    elif user.role == "victim":
+        template = "core/dashboard_victim.html"
+    else:
+        template = "core/dashboard_default.html"
+
+    return render(request, template, {"user": user})

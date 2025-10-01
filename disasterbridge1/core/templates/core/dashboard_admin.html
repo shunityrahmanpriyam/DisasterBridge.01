@@ -1,0 +1,7 @@
+<h2>Admin Dashboard</h2>
+<p>Welcome {{ user.name }}! You can manage everything here.</p>
+<ul>
+    <li><a href="{% url 'user_list' %}">Manage Users</a></li>
+    <li><a href="{% url 'aidrequest_list' %}">View Aid Requests</a></li>
+    <li><a href="{% url 'donationinfo' %}">Donation Info</a></li>
+</ul>
