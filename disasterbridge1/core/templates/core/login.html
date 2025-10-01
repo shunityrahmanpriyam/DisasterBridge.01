@@ -5,49 +5,13 @@
     <title>Login</title>
     <style>
         body { font-family: Arial, sans-serif; background: #f0f2f5; }
-        .container {
-            width: 400px; margin: 80px auto; padding: 20px;
-            background: white; border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+        .container { width: 400px; margin: 80px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         h2 { text-align: center; margin-bottom: 20px; }
         form { display: flex; flex-direction: column; }
         input { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
         button { background: #007bff; color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; }
         button:hover { background: #0056b3; }
         p { text-align: center; margin-top: 10px; }
-
-        /* Extra styles for alternative login buttons */
-        .alt-logins {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.login-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px; /* দুইটা button এর মাঝে space */
-    margin-top: 10px;
-}
-
-.login-buttons button {
-    flex: 1;
-    padding: 10px;
-    font-weight: bold;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    min-width: 150px;
-}
-
-.google-btn { background: #db4437; color: white; }
-.google-btn:hover { background: #b13629; }
-.appsite-btn { background: #34a853; color: white; }
-.appsite-btn:hover { background: #2c8a43; }
-
-        .forgot { text-align: right; margin-top: -10px; margin-bottom: 15px; }
-        .forgot a { color: #007bff; font-size: 0.9em; text-decoration: none; }
-        .forgot a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -56,22 +20,8 @@
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-
-            <div class="forgot">
-                <a href="#">Forgot Password?</a>
-            </div>
-
             <button type="submit">Login</button>
         </form>
-
-        <div class="alt-logins">
-    <p>Or login with:</p>
-    <div class="login-buttons">
-        <button class="google-btn"> Google</button>
-        <button class="appsite-btn">Apple</button>
-    </div>
-</div>
-
         <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
     </div>
 </body>
