@@ -24,3 +24,27 @@ class LanguageForm(forms.ModelForm):
         widgets = {
             'language_preference': forms.Select(attrs={'class': 'form-control'})
         }
+
+class DonationForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        fields = [
+            'donation_type',
+            'amount',
+            'items_title',
+            'items_description',
+            'payment_method',
+            'receipt_number',
+            'pickup_date',
+            'pickup_time',
+            'pickup_address',
+        ]
+        widgets = {
+            'pickup_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'pickup_time': forms.TimeInput(attrs={'type': 'time', 'class': 'form-control'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter amount'}),
+            'items_title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Item title'}),
+            'items_description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Description'}),
+            'pickup_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
+            'receipt_number': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+        }

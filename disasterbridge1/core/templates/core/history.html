@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Donation History</title>
+</head>
+<body>
+  <h2>My Donations</h2>
+  <table border="1" cellpadding="8" cellspacing="0">
+    <tr>
+      <th>Donation ID</th>
+      <th>Date</th>
+      <th>Type</th>
+      <th>Amount / Items</th>
+      <th>Pickup Address</th>
+      <th>Status</th>
+    </tr>
+    {% for d in donations %}
+    <tr>
+      <td>{{ d.receipt_number }}</td>
+      <td>{{ d.created_at|date:"M d, Y" }}</td>
+      <td>{{ d.get_donation_type_display }}</td>
+      <td>
+        {% if d.donation_type == "money" %}
+          BDT {{ d.amount }}
+        {% else %}
+          {{ d.items_title }}
+        {% endif %}
+      </td>
+      <td>{{ d.pickup_address }}</td>
+      <td>{{ d.status }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="6">No donations yet.</td>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+</html>

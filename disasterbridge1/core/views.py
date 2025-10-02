@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect,get_object_or_404
-from .models import User, AidRequest, Donation, Feedback,  VolunteerAssignment
+from .models import User, AidRequest,  Feedback,  VolunteerAssignment
 
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
@@ -9,9 +9,14 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 # 30sept
 from .forms import LanguageForm
 from .models import Notification
+from .forms import DonationForm
+from .models import Donation
+import datetime
 
 def home(request):
     return render(request, 'core/home.html')
+
+
 
 # ==== USER ====
 def user_list(request):
@@ -202,3 +207,28 @@ def dashboard(request):
         template = "core/dashboard_default.html"
 
     return render(request, template, {"user": user})
+
+
+@login_required
+def make_donation(request):
+    if request.method == "POST":
+        form = DonationForm(request.POST)
+        if form.is_valid():
+            donation = form.save(commit=False)
+            donation.donor = request.user
+
+            # Auto-generate receipt number like "DR-YYYYMMDD-XXXX"
+            today = datetime.date.today().strftime("%Y%m%d")
+            donation.receipt_number = f"DR-{today}-{Donation.objects.count()+1:04d}"
+
+            donation.save()
+            return redirect('donation_history')
+    else:
+        form = DonationForm()
+
+    return render(request, "core/donation.html", {"form": form})
+
+@login_required
+def donation_history(request):
+    donations = Donation.objects.filter(donor=request.user).order_by("-created_at")
+    return render(request, "core/history.html", {"donations": donations})

@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -71,17 +72,36 @@ class AidRequest(models.Model):
 
 
 class Donation(models.Model):
-    donation_id = models.AutoField(primary_key=True)
-    donor = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role': 'donor'})
-    request = models.ForeignKey(AidRequest, on_delete=models.CASCADE, null=True, blank=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50)
-    donation_date = models.DateTimeField(auto_now_add=True)
-    receipt_number = models.CharField(max_length=100, null=True, blank=True)
-    transaction = models.CharField(max_length=255, null=True, blank=True)
+    DONATION_TYPE_CHOICES = [
+        ('money', 'Money'),
+        ('items', 'Items'),
+    ]
+
+    PAYMENT_METHOD_CHOICES = [
+        ('bkash', 'bKash'),
+        ('nagad', 'Nagad'),
+        ('visa', 'Visa'),
+    ]
+
+    donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    donation_type = models.CharField(
+        max_length=20,
+        choices=DONATION_TYPE_CHOICES,
+        default='money'
+    )
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    items_title = models.CharField(max_length=255, blank=True, null=True)
+    items_description = models.TextField(blank=True, null=True)
+    payment_method = models.CharField(max_length=20, choices=PAYMENT_METHOD_CHOICES, blank=True, null=True)
+    receipt_number = models.CharField(max_length=50, blank=True, null=True)
+    pickup_date = models.DateField(blank=True, null=True)
+    pickup_time = models.TimeField(blank=True, null=True)
+    pickup_address = models.CharField(max_length=255, blank=True, null=True)
+    status = models.CharField(max_length=20, default="Pending")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Donation {self.donation_id} - {self.amount}"
+        return f"Donation by {self.donor.email} - {self.donation_type}"
 
 
 class Feedback(models.Model):

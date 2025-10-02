@@ -16,11 +16,11 @@
             {{ n.message }} <br>
             <small>{{ n.timestamp|timesince }} ago</small><br>
 
-            {% if n.status == "unread" and user.role != "Admin" %}
+            {% if n.status == "unread" and user.role != "admin" %}
                 <a href="{% url 'mark_as_read' n.notification_id %}">Mark as read</a>
             {% endif %}
 
-            {% if user.role == "Admin" %}
+            {% if user.role == "admin" %}
                 <a href="{% url 'delete_notification' n.notification_id %}" style="color:red">Delete</a>
             {% endif %}
         </div>

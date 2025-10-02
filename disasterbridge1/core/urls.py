@@ -42,6 +42,8 @@ path('signup/', views.signup_view, name='signup'),
 path("profile/", views.user_profile, name="user_profile"),
 path('change-language/', views.change_language, name='change_language'),
 path("dashboard/", views.dashboard, name="dashboard"),
+path("donate/", views.make_donation, name="make_donation"),
+    path("my-donations/", views.donation_history, name="donation_history"),
 
 
 ]
