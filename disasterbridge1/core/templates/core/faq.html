@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -124,14 +125,14 @@
 
 <!-- Navbar -->
 <nav class="navbar">
-    <div class="container-xl d-flex">
-        <!-- Logo link: Set to explicit root path (/) -->
-        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-            <!-- Custom Logo SVG placeholder -->
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2" style="color: #e63946;">
-                <path d="M12 2L2 12L12 22L22 12L12 2Z" fill="currentColor"/>
-                <path d="M12 5.5L5.5 12L12 18.5L18.5 12L12 5.5Z" fill="#ffffff"/>
-            </svg>
+    <div class="container-xl d-flex justify-content-between">
+        <!-- Logo -->
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="{% url 'home' %}">
+            <img src="{% static 'core/images/logo.png' %}"
+                 alt="DisasterBridge Logo"
+                 class="me-2 logo-img"
+                 onerror="this.onerror=null; this.src='https://placehold.co/40x40/e63946/ffffff?text=DB';"
+                 style="max-height: 60px; width: auto;">
             Disaster<span class="fw-normal">Bridge</span>
         </a>
 
