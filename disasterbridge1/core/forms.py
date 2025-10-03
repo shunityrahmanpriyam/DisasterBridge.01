@@ -2,6 +2,9 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 from .models import Donation
+from .models import AidRequest
+from .models import LiveUpdate
+
 
 User = get_user_model()
 
@@ -48,3 +51,17 @@ class DonationForm(forms.ModelForm):
             'pickup_address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Address'}),
             'receipt_number': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
         }
+
+
+class AidRequestForm(forms.ModelForm):
+    class Meta:
+        model = AidRequest
+        fields = ["location", "category", "urgency", "voice_message", "photo", "notes"]
+
+
+class LiveUpdateForm(forms.ModelForm):
+    class Meta:
+        model = LiveUpdate
+        fields = ["category", "title", "description", "volunteer_name", "location", "image"]
+
+

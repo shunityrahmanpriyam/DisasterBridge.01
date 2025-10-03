@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</h{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Request Aid</title>
+  <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+</head>
+<body>
+  <h1>REQUEST AID</h1>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label>Location</label>
+    {{ form.location }}
+
+    <label>Category</label>
+    {{ form.category }}
+
+    <label>Urgency</label>
+    {{ form.urgency }}
+
+    <label>Upload Voice Message</label>
+    {{ form.voice_message }}
+
+    <label>Upload Photo</label>
+    {{ form.photo }}
+
+    <label>Additional Notes</label>
+    {{ form.notes }}
+
+    <button type="submit">Submit Request</button>
+  </form>
+
+  <p>
+    If you or your family are affected by disaster, provide your location, type of help,
+    urgency, and any notes/photos. Once submitted, you’ll receive a Request ID
+    to track your request in <strong>My Requests</strong>.
+  </p>
+</body>
+</html>
+
+tml>

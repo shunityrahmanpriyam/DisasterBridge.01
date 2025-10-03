@@ -56,19 +56,41 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f"{self.name} ({self.role})"
 
+
+
 class AidRequest(models.Model):
+    URGENCY_CHOICES = [
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+    ]
+
+    CATEGORY_CHOICES = [
+        ("food", "Food"),
+        ("shelter", "Shelter"),
+        ("medical", "Medical"),
+        ("clothes", "Clothes"),
+        ("other", "Other"),
+    ]
+
     request_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     location = models.CharField(max_length=255)
-    category = models.CharField(max_length=100)
-    urgency_level = models.CharField(max_length=50)
-    status = models.CharField(max_length=50, default="pending")
-    request_date = models.DateTimeField(auto_now_add=True)
-    voice_message_path = models.CharField(max_length=255, null=True, blank=True)
-    priority_score = models.IntegerField(default=0)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    urgency = models.CharField(
+        max_length=20,
+        choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')],
+        default='Medium'
+    )
+    voice_message = models.FileField(upload_to="aid/voice/", null=True, blank=True)
+    photo = models.ImageField(upload_to="aid/photos/", null=True, blank=True)
+    notes = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, default="Pending")
 
     def __str__(self):
-        return f"AidRequest {self.request_id} by {self.user.name}"
+        return f"Request {self.request_id} - {self.user.name}"
+
 
 
 class Donation(models.Model):
@@ -139,4 +161,24 @@ class VolunteerAssignment(models.Model):
 
     def __str__(self):
         return f"Assignment {self.assignment_id} - {self.volunteer.name}"
+
+
+class LiveUpdate(models.Model):
+    CATEGORY_CHOICES = [
+        ("Relief", "Relief"),
+        ("Medical", "Medical"),
+        ("Shelter", "Shelter"),
+        ("Other", "Other"),
+    ]
+
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    title = models.CharField(max_length=200)
+    description = models.TextField()
+    volunteer_name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="updates/", blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.title} ({self.location})"
 

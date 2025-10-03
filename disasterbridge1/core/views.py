@@ -12,6 +12,10 @@ from .models import Notification
 from .forms import DonationForm
 from .models import Donation
 import datetime
+from .forms import AidRequestForm
+from .models import LiveUpdate
+
+
 
 def home(request):
     return render(request, 'core/home.html')
@@ -232,3 +236,47 @@ def make_donation(request):
 def donation_history(request):
     donations = Donation.objects.filter(donor=request.user).order_by("-created_at")
     return render(request, "core/history.html", {"donations": donations})
+
+@login_required
+def request_aid(request):
+    if request.method == "POST":
+        form = AidRequestForm(request.POST, request.FILES)
+        if form.is_valid():
+            aid_request = form.save(commit=False)
+            aid_request.user = request.user
+            aid_request.save()
+            messages.success(request, f"Your request has been submitted! Request ID: {aid_request.request_id}")
+            return redirect("my_requests")  # তোমার My Requests পেজে যাবে
+    else:
+        form = AidRequestForm()
+    return render(request, "core/request_aid.html", {"form": form})
+
+@login_required
+def my_requests(request):
+    requests = AidRequest.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, "core/my_requests.html", {"requests": requests})
+
+
+def live_updates(request):
+    category = request.GET.get("category")
+    location = request.GET.get("location")
+    date = request.GET.get("date")
+
+    updates = LiveUpdate.objects.all()
+
+    if category and category != "All":
+        updates = updates.filter(category=category)
+    if location and location != "All":
+        updates = updates.filter(location__icontains=location)
+    if date:
+        updates = updates.filter(created_at__date=date)
+
+    return render(request, "core/live_updates.html", {"updates": updates})
+
+
+
+def privacy_policy(request):
+    return render(request, "core/privacy.html")
+
+def terms_of_service(request):
+    return render(request, "core/terms.html")

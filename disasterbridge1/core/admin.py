@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import User, AidRequest, Donation, Feedback, Notification, VolunteerAssignment
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-
+from .models import LiveUpdate
 
 # admin.site.register(User)
 admin.site.register(AidRequest)
@@ -30,4 +30,12 @@ class UserAdmin(BaseUserAdmin):
     ordering = ("name",)
 
 admin.site.register(User, UserAdmin)
+
+@admin.register(LiveUpdate)
+class LiveUpdateAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'location', 'volunteer_name', 'created_at')
+    list_filter = ('category', 'location', 'created_at')
+    search_fields = ('title', 'description', 'volunteer_name', 'location')
+    ordering = ('-created_at',)
+
 

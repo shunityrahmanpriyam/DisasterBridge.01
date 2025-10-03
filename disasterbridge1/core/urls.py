@@ -44,6 +44,11 @@ path('change-language/', views.change_language, name='change_language'),
 path("dashboard/", views.dashboard, name="dashboard"),
 path("donate/", views.make_donation, name="make_donation"),
     path("my-donations/", views.donation_history, name="donation_history"),
+path("request-aid/", views.request_aid, name="request_aid"),
+    path("my-requests/", views.my_requests, name="my_requests"),
+    path("updates/", views.live_updates, name="live_updates"),
+    path("privacy/", views.privacy_policy, name="privacy"),
+    path("terms/", views.terms_of_service, name="terms"),
 
 
 ]

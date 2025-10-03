@@ -1,0 +1,60 @@
+<!-- templates/core/live_updates.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Updates</title>
+    <link rel="stylesheet" href="{% static 'core/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .update-card {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .update-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .update-card h3 {
+            margin-top: 0;
+        }
+        .update-meta {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔔 Live Updates</h1>
+
+    {% if updates %}
+        {% for update in updates %}
+            <div class="update-card">
+                <h3>{{ update.title }}</h3>
+                <p>{{ update.description }}</p>
+                <p><strong>Category:</strong> {{ update.category }}</p>
+                <p><strong>Volunteer:</strong> {{ update.volunteer_name }}</p>
+                <p><strong>Location:</strong> {{ update.location }}</p>
+                {% if update.image %}
+                    <img src="{{ update.image.url }}" alt="{{ update.title }}">
+                {% endif %}
+                <p class="update-meta">Posted on: {{ update.created_at|date:"d M Y H:i" }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No live updates available right now. Please check back later.</p>
+    {% endif %}
+
+</body>
+</html>

@@ -1,6 +1,6 @@
 <h2>Victim Dashboard</h2>
 <p>Welcome {{ user.name }}! You can request help here.</p>
 <ul>
-    <li><a href="{% url 'aidrequest_list' %}">Request Aid</a></li>
-    <li><a href="#">My Requests</a></li>
+    <li><a href="{% url 'request_aid' %}">Request Aid</a></li>
+    <li><a href="{% url 'my_requests' %}">My Requests</a></li>
 </ul>
