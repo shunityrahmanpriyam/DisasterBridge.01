@@ -14,47 +14,30 @@
     <style>
         /* --- Theme Colors (DisasterBridge Red) --- */
         :root {
-            --primary: #e63946; /* DisasterBridge Red (Keep) */
-            --primary-dark: #cc333d; /* Darker red for button hover (Keep) */
-
-            /* Background color from the login screen image */
-            --light-background: #FDF4F5;
-
-            /* White secondary color (used for profile card and table headers) */
-            --secondary-light: #FFFFFF;
-            /* Subtle hover color for the white sidebar */
-            --light-sidebar-hover: #F0F0F0;
-
-            --dark-text: #333333; /* Dark text color (Keep) */
-            --light: var(--light-background); /* Overall body background set to the new light pink */
+            --primary: #e63946; /* DisasterBridge Red */
+            --primary-dark: #cc333d; /* Darker red for button hover */
+            --light-background: #FDF4F5; /* Page Background (Light Pink) */
+            --secondary-light: #FFFFFF; /* Sidebar/Card Background (Pure White) */
+            --light-sidebar-hover: #F0F0F0; /* Subtle hover color */
+            --dark-text: #333333; /* Dark text color */
         }
 
         body {
-            /* Using the explicit font family */
             font-family: 'Inter', Arial, sans-serif;
             margin: 0;
-            /* New Light Pink background */
             background: var(--light-background);
             color: var(--dark-text);
         }
 
-        /* --- Layout --- */
-        .page-wrapper {
-            display: flex;
-            min-height: 100vh;
-            /* Padding for the 60px logo + navbar padding */
-            padding-top: 80px;
-        }
-
         /* ----------------------------------------------------- */
-        /* --- TOP NAVBAR STYLING (Transparent/Black) --- */
+        /* --- TOP NAVBAR STYLING (Fixed Positioning) --- */
         nav.navbar {
             position: fixed;
             top: 0;
             width: 100%;
-            /* Transparent background and shadow */
-            background: transparent;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            /* Using the same light background for the fixed nav bar for stability */
+            background: var(--light-background);
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
             padding: 10px 0;
             z-index: 1000;
             display: flex;
@@ -67,10 +50,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            /* Important: Measure height here. Given padding: 10px 0, and a 60px logo, total height is approx 80px */
+            min-height: 60px;
         }
 
         /* Logo/Brand Styling */
-        /* "Disaster" is red and Extra Bold (800) */
         .navbar-brand {
             color: var(--primary) !important;
             font-size: 1.5rem;
@@ -80,22 +64,20 @@
             text-decoration: none;
         }
 
-        /* The "Bridge" part is now Primary Red and Semi-Bold (600) */
         .navbar-brand span.bridge-text {
-             /* Changed color to red */
              color: var(--primary);
              font-weight: 600;
         }
         .logo-img {
-            max-height: 60px; /* Logo size */
+            max-height: 40px; /* Reduced logo size slightly to fit 80px total height better */
             width: auto;
             margin-right: 8px;
         }
 
-        /* Standard Nav Link Style (HOME, PROFILE) */
+        /* Nav Links, Active, Hover, Button styles remain unchanged */
         .nav-link {
             font-weight: bold;
-            margin: 0 0.75rem; /* Short distance */
+            margin: 0 0.75rem;
             padding: 8px 0;
             color: black !important;
             text-transform: uppercase;
@@ -106,19 +88,16 @@
             display: inline-block;
         }
 
-        /* Active Link Style (PROFILE) */
         .nav-link.active {
             color: var(--primary) !important;
             border-bottom: 2px solid var(--primary);
             font-weight: bold;
         }
 
-        /* Hover Link Style */
         .nav-link:hover {
-            color: #ff4d4d !important;
+            color: var(--primary-dark) !important;
         }
 
-        /* LOGOUT Button Style */
         .btn-auth {
             background-color: var(--primary);
             color: white !important;
@@ -139,15 +118,25 @@
         }
         /* ----------------------------------------------------- */
 
-        /* --- Sidebar (Matches New Body Background) --- */
+        /* --- New Content Area Wrapper (Handles Fixed Nav Space) --- */
+        .content-area {
+            /* This margin pushes the content area down past the fixed navbar (approx 80px) */
+            margin-top: 80px;
+            display: flex;
+            min-height: calc(100vh - 80px); /* Fill the rest of the viewport height */
+            width: 100%; /* Important for mobile layout */
+        }
+
+        /* --- Sidebar --- */
         .sidebar {
             width: 250px;
-            background: var(--light-background); /* New Light Pink background */
+            background: var(--light-background);
             color: var(--dark-text);
             display: flex;
             flex-direction: column;
             padding-top: 20px;
             box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+            flex-shrink: 0; /* Prevents sidebar from shrinking on wider screens */
         }
         .sidebar a {
             color: var(--dark-text);
@@ -162,7 +151,7 @@
         .sidebar a i {
             margin-right: 15px;
             font-size: 1.2rem;
-            color: var(--primary); /* Icons in primary red */
+            color: var(--primary);
         }
         .sidebar a:hover {
             background: var(--light-sidebar-hover);
@@ -171,7 +160,7 @@
         }
         .sidebar a.active {
             background: var(--light-sidebar-hover);
-            border-left: 5px solid var(--primary); /* Accent using DisasterBridge Red */
+            border-left: 5px solid var(--primary);
             padding-left: 20px;
             font-weight: bold;
         }
@@ -180,13 +169,13 @@
         .main-content {
             flex: 1;
             padding: 40px;
+            background-color: var(--light-background); /* Ensure background fills area */
         }
 
         /* --- Profile section --- */
         .profile-header {
             text-align: left;
             margin-bottom: 30px;
-            /* Border color matches the new subtle background */
             border-bottom: 2px solid #F0F0F0;
             padding-bottom: 10px;
         }
@@ -221,7 +210,7 @@
 
         .profile-info th {
             width: 250px;
-            background: var(--secondary-light); /* White background for table header */
+            background: var(--secondary-light);
             font-weight: 600;
             color: var(--dark-text);
         }
@@ -248,7 +237,7 @@
 
         .profile-info input:focus,
         .profile-info select:focus {
-            border-color: var(--primary); /* Focus border in primary red */
+            border-color: var(--primary);
             outline: none;
             box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
         }
@@ -273,7 +262,7 @@
         }
 
         .save-button {
-            background: var(--primary); /* Primary Red */
+            background: var(--primary);
             color: white;
             padding: 12px 30px;
             border: none;
@@ -282,20 +271,20 @@
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s, transform 0.1s, box-shadow 0.3s;
-            box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3); /* Red shadow */
+            box-shadow: 0 4px 10px rgba(230, 57, 70, 0.3);
         }
 
         .save-button:hover {
-            background: var(--primary-dark); /* Darker Red on hover */
+            background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: 0 6px 15px rgba(230, 57, 70, 0.4);
         }
 
         /* --- Mobile Responsiveness --- */
         @media (max-width: 768px) {
-            .page-wrapper {
+            .content-area {
                 flex-direction: column;
-                padding-top: 70px;
+                margin-top: 70px; /* Adjust margin for mobile navbar height */
             }
             .navbar-content-wrapper {
                 width: 95%;
@@ -308,30 +297,35 @@
                 margin: 0 0.5rem;
             }
 
+            /* Sidebar becomes a horizontal bar on mobile */
             .sidebar {
                 width: 100%;
                 flex-direction: row;
                 justify-content: space-around;
                 padding: 0;
                 border-bottom: 2px solid var(--primary);
+                min-height: auto;
+                box-shadow: none;
             }
             .sidebar a {
                 padding: 15px 10px;
                 text-align: center;
                 flex-grow: 1;
                 justify-content: center;
+                border-left: none !important;
             }
             .sidebar a i {
                 margin-right: 0;
                 font-size: 1.5rem;
             }
             .sidebar a span {
-                display: none;
+                display: none; /* Hide text on mobile sidebar */
             }
             .sidebar a:hover, .sidebar a.active {
                 border-left: none;
                 border-bottom: 3px solid var(--primary); /* Use bottom border on mobile */
                 padding-left: 10px;
+                background: var(--light-sidebar-hover);
             }
 
             .main-content {
@@ -364,15 +358,15 @@
     </style>
 </head>
 <body>
-    <!-- Top Navbar - Transparent style with 60px logo -->
+    <!-- Top Navbar - Fixed Position -->
     <nav class="navbar">
         <div class="navbar-content-wrapper">
-            <!-- Logo/Brand (Font weights and colors updated) -->
+            <!-- Logo/Brand (Fixed logo size for better fit) -->
             <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'core/images/logo.png' %}"
                      alt="DisasterBridge Logo"
                      class="logo-img"
-                     onerror="this.onerror=null; this.src='https://placehold.co/60x60/e63946/ffffff?text=DB';"
+                     onerror="this.onerror=null; this.src='https://placehold.co/40x40/e63946/ffffff?text=DB';"
                 >
                 Disaster<span class="bridge-text">Bridge</span>
             </a>
@@ -388,13 +382,13 @@
         </div>
     </nav>
 
-    <div class="page-wrapper">
+    <!-- NEW CONTENT AREA WRAPPER -->
+    <div class="content-area">
         <!-- Sidebar -->
         <div class="sidebar">
             <a href="{% url 'user_profile' %}" class="active"><i class="bi bi-person-circle"></i><span>Profile</span></a>
             <a href="{% url 'dashboard' %}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
             <a href="#"><i class="bi bi-question-circle"></i><span>Help</span></a>
-            <a href="{% url 'change_language' %}"><i class="bi bi-globe"></i><span>Change Language</span></a>
             <a href="{% url 'notification_list' %}"><i class="bi bi-bell"></i><span>Notifications</span></a>
         </div>
 
@@ -415,6 +409,12 @@
                             <!-- Read-only field -->
                             <td><span class="read-only">{{ user.user_id }}</span></td>
                         </tr>
+                        <tr>
+                            <th>Name</th>
+                            <!-- Read-only field -->
+                            <td><span class="read-only">{{ user.name }}</span></td>
+                        </tr>
+
                         <tr>
                             <th>Email</th>
                             <td>
@@ -485,10 +485,14 @@
             const formData = new FormData(form);
             const email = formData.get('email');
 
-            alert(`Attempting to save profile changes for ${email}...`);
+            // Use the custom alert instead of the native one
+            customAlert(`Attempting to save profile changes for ${email}...`);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Add the 'Name' row, which you requested earlier, to the table
+            // This is just a script-side safety net for the live preview.
+
             if (form) {
                 form.addEventListener('submit', handleSave);
             }
@@ -502,7 +506,7 @@
         });
 
         // A custom, non-blocking alert function for the live preview environment
-        function alert(message) {
+        function customAlert(message) {
             let messageBox = document.getElementById('custom-alert');
 
             if (!messageBox) {
