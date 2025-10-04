@@ -1,10 +1,418 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>terms</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service - DisasterBridge</title>
+  
+  <!-- Load Inter Font for a modern, clean look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Load Bootstrap Icons for social media in footer -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+  <style>
+    /* --- THEME COLORS & VARIABLES --- */
+    :root {
+      --db-accent-red: #e63946; /* Primary Red */
+      --db-darker-red: #c0313d; /* Hover/Active Red */
+      --db-brighter-red-hover: #ff4d4d; /* Specific hover color */
+      --db-page-bg: #ffecec; /* Very Light Pink */
+      --db-card-bg: white;
+      --db-text-dark: #1f2937; /* Dark Text Color */
+      --db-text-medium: #6c7a89;
+      --db-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      --db-border-radius: 8px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--db-page-bg);
+      color: var(--db-text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container-lg {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    h1, h2, h3, h4 {
+        color: var(--db-text-dark);
+        font-weight: 700;
+    }
+    
+    /* --- NAVBAR STYLES --- */
+    nav {
+      background: var(--db-page-bg); 
+      padding: 15px 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); 
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    /* Logo Styling */
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem; 
+      color: var(--db-accent-red);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    
+    .logo img {
+      margin-right: 10px; 
+      display: block; 
+    }
+
+    .logo-disaster {
+        font-weight: 900;
+        color: var(--db-accent-red);
+    }
+    .logo-bridge {
+        font-weight: 500;
+        color: var(--db-accent-red);
+    }
+
+
+    /* Nav Link Styling */
+    .nav-links-container {
+      display: flex;
+      align-items: center;
+    }
+    .nav-link {
+        text-decoration: none;
+        color: var(--db-text-dark) !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.95rem;
+        margin: 0 12px;
+        padding: 8px 0;
+        border-bottom: 2px solid transparent;
+        transition: color 0.2s, border-bottom 0.2s;
+    }
+
+    .nav-link-active, .nav-link-active:hover {
+        color: var(--db-accent-red) !important;
+        border-bottom: 2px solid var(--db-accent-red);
+    }
+    
+    .nav-link:hover {
+        color: var(--db-brighter-red-hover) !important;
+        border-bottom: 2px solid var(--db-brighter-red-hover);
+    }
+
+    /* Login/Logout Button Styling */
+    .btn-login {
+        background-color: var(--db-accent-red);
+        color: white !important;
+        border-radius: 8px;
+        padding: 8px 18px;
+        font-weight: 700;
+        border: none;
+        transition: background-color 0.2s, transform 0.2s;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.875rem;
+        margin-left: 12px;
+        cursor: pointer;
+    }
+    .btn-login:hover {
+        background-color: var(--db-darker-red);
+        color: white !important;
+        transform: none;
+    }
+
+    /* --- PAGE-SPECIFIC STYLES: TERMS CONTENT --- */
+    .terms-content {
+        background: var(--db-card-bg);
+        padding: 40px;
+        margin: 30px auto;
+        border-radius: var(--db-border-radius);
+        box-shadow: var(--db-box-shadow);
+        max-width: 900px;
+        border-top: 5px solid var(--db-accent-red);
+    }
+
+    .terms-content h1 {
+        font-size: 2.5rem;
+        font-weight: 900;
+        text-align: center;
+        color: var(--db-accent-red);
+        margin-bottom: 5px;
+    }
+
+    .terms-content h2 {
+        font-size: 1.75rem;
+        color: var(--db-text-dark);
+        margin-top: 30px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid var(--db-page-bg);
+    }
+
+    .terms-content p, .terms-content ul {
+        font-size: 1rem;
+        color: var(--db-text-dark);
+        margin-bottom: 15px;
+    }
+
+    .terms-content ul {
+        list-style-type: disc;
+        padding-left: 25px;
+    }
+    
+    .terms-content li {
+        margin-bottom: 8px;
+        color: var(--db-text-medium);
+    }
+
+    /* --- FOOTER STYLES --- */
+    footer {
+        background: var(--db-page-bg);
+        color: var(--db-text-dark);
+        text-align: center;
+        padding: 2rem 20px 1rem; 
+        font-size: 0.9rem;
+        margin-top: auto; 
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    footer p {
+      margin: 5px 0;
+      font-size: 0.8rem;
+    }
+    footer a {
+      color: var(--db-accent-red);
+      text-decoration: none;
+      margin: 0 8px;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .social-icon-link {
+        font-size: 1.2rem;
+        margin: 0 10px;
+    }
+    footer a:hover {
+      color: var(--db-brighter-red-hover); 
+    }
+    footer p:last-child {
+        margin-top: 15px;
+    }
+    
+    /* --- Mobile Responsiveness --- */
+    @media (max-width: 768px) {
+      nav {
+        padding: 12px 15px;
+      }
+      .nav-links-container {
+        display: none;
+      }
+      .logo {
+          font-size: 1.2rem; 
+      }
+      .logo img {
+          max-height: 32px !important;
+          height: auto;
+          margin-right: 6px; 
+      }
+      .terms-content {
+          padding: 20px;
+      }
+      .terms-content h1 {
+          font-size: 2rem;
+      }
+      .terms-content h2 {
+          font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-<h3>efgh</h3>
+  <!-- Navbar -->
+  <nav>
+    <div class="navbar-content">
+        <!-- Logo link -->
+        <a class="logo" href="/">
+            <img src="{% static 'core/images/logo.png' %}"
+                 alt="DisasterBridge Logo"
+                 onerror="this.onerror=null; this.src='https://placehold.co/60x60/e63946/ffffff?text=DB';"
+                 style="max-height: 60px; width: auto;">
+            <span class="logo-disaster">Disaster</span><span class="logo-bridge">Bridge</span>
+        </a>
+
+        <!-- Links container -->
+        <div class="nav-links-container">
+            <a href="/" class="nav-link">HOME</a>
+            <a href="/signup/" class="nav-link" id="request-help-link">REQUEST HELP</a>
+            <a href="/donationinfo/" class="nav-link">DONATE</a>
+            <a href="/updates/" class="nav-link">UPDATES</a>
+            <a href="/login/" class="btn-login" id="login-logout-btn">SIGN IN/ LOGIN</a>
+        </div>
+    </div>
+  </nav>
+  
+  <div class="container-lg">
+      <!-- Terms Content Section -->
+      <section class="terms-content">
+        <h1>Terms of Service</h1>
+        <p class="text-center" style="color: var(--db-text-medium); font-style: italic;">Last Updated: October 4, 2025</p>
+
+        <p>Welcome to DisasterBridge! These Terms of Service ("Terms") govern your use of the DisasterBridge web application (the "Service"). By accessing or using the Service, you agree to be bound by these Terms.</p>
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>By registering for and using the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms, as well as our Privacy Policy, which is incorporated by reference.</p>
+
+        <h2>2. User Registration and Roles</h2>
+        <p>You may register for the Service under one of three primary roles:</p>
+        <ul>
+            <li><strong>Victim:</strong> Individuals or organizations requesting aid following a disaster.</li>
+            <li><strong>Volunteer:</strong> Individuals willing to provide physical assistance, logistics, or administrative support.</li>
+            <li><strong>Donor:</strong> Individuals or organizations providing monetary funds or material goods.</li>
+        </ul>
+        <p>You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete.</p>
+
+        <h2>3. Use of the Service</h2>
+
+        <h3>3.1. Purpose</h3>
+        <p>The Service is intended solely to facilitate disaster relief efforts by connecting people in need with available resources. Any use outside of this purpose is strictly prohibited.</p>
+
+        <h3>3.2. Prohibited Conduct</h3>
+        <p>You agree not to use the Service to:</p>
+        <ul>
+            <li>Submit fraudulent, false, or misleading requests for aid or donation information.</li>
+            <li>Harass, abuse, or threaten other users.</li>
+            <li>Engage in any activity that is illegal or infringes upon the rights of others.</li>
+            <li>Upload or transmit viruses or any other harmful code.</li>
+            <li>Attempt to gain unauthorized access to any portion of the Service.</li>
+        </ul>
+        <p style="color: var(--db-accent-red); font-weight: 700;">DisasterBridge reserves the right to immediately suspend or terminate any account found to be in violation of these prohibitions.</p>
+
+        <h2>4. Disclaimers and Limitations of Liability</h2>
+        <p>The Service acts as a matching and communication platform. We do not directly provide emergency aid, medical care, or security services.</p>
+        <ul>
+            <li><strong>No Guarantee of Aid:</strong> While we strive to match all requests, we cannot guarantee that aid will be delivered or that donations will meet specific needs due to the unpredictable nature of disasters.</li>
+            <li><strong>Volunteer Risk:</strong> Volunteers acknowledge that disaster relief efforts carry inherent risks, and they assume all risk associated with their activities.</li>
+            <li><strong>Limitation of Liability:</strong> DisasterBridge shall not be liable for any direct, indirect, incidental, special, or consequential damages resulting from the use or inability to use the Service.</li>
+        </ul>
+
+        <h2>5. Donations and Financial Transactions</h2>
+        <p>All monetary donations are processed by secure third-party payment processors. DisasterBridge is not responsible for the processing or security of these external transactions. Donors agree that donations are non-refundable once processed.</p>
+
+        <h2>6. Termination</h2>
+        <p>We may terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason, including without limitation if you breach the Terms.</p>
+
+        <h2>7. Governing Law</h2>
+        <p>These Terms shall be governed and construed in accordance with the laws of [Insert Jurisdiction Here], without regard to its conflict of law provisions.</p>
+
+        <h2>8. Contact Information</h2>
+        <p>If you have any questions about these Terms, please contact us at:</p>
+        <p><strong>DisasterBridge Administration</strong><br>
+        Email: <a href="mailto:terms@disasterbridge.org" style="color: var(--db-accent-red);">terms@disasterbridge.org</a></p>
+
+      </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container-lg">
+        <!-- Navigation Buttons -->
+        <div class="mb-3">
+            <a href="{% url 'about' %}" class="footer-btn">ABOUT</a> |
+            <a href="{% url 'contact' %}" class="footer-btn">CONTACT INFO</a> |
+            <a href="{% url 'faq' %}" class="footer-btn">HELP/FAQ</a>
+        </div>
+
+        <!-- Social Media Buttons -->
+        <div class="mb-3">
+            <a href="https://facebook.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="https://twitter.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+            <a href="https://linkedin.com/company/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        </div>
+
+        <!-- Legal -->
+        <p class="text-muted small mb-0" style="color: var(--db-text-medium);">
+            &copy; 2025 DisasterBridge. All rights reserved. <br>
+            <a href="{% url 'privacy' %}" class="text-danger">Privacy Policy</a> | <a href="{% url 'terms' %}" class="text-danger">Terms of Service</a>
+        </p>
+    </div>
+  </footer>
+
+  <!-- Firebase SDKs for Nav -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+
+    // --- Firebase Initialization and Auth Logic ---
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+    
+    if (Object.keys(firebaseConfig).length > 0) {
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Initial sign-in attempt
+        if (initialAuthToken) {
+            signInWithCustomToken(auth, initialAuthToken).catch(error => {
+                console.error("Error signing in with custom token:", error);
+                signInAnonymously(auth).catch(anonError => console.error("Error signing in anonymously:", anonError));
+            });
+        } else {
+            signInAnonymously(auth).catch(error => console.error("Error signing in anonymously:", error));
+        }
+
+        // UI elements
+        const loginLogoutButton = document.getElementById('login-logout-btn');
+        const helpLink = document.getElementById('request-help-link');
+
+        function handleLogout(event) {
+            event.preventDefault();
+            signOut(auth).then(() => {
+                console.log('User signed out.');
+            }).catch((error) => {
+                console.error('Logout error:', error);
+            });
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is Logged In
+                loginLogoutButton.textContent = 'LOGOUT';
+                loginLogoutButton.href = '#';
+                loginLogoutButton.onclick = handleLogout;
+                
+                helpLink.textContent = 'MY REQUESTS';
+                helpLink.href = '/my-requests';
+            } else {
+                // User is Logged Out
+                loginLogoutButton.textContent = 'SIGN IN/ LOGIN';
+                loginLogoutButton.href = '/login/';
+                loginLogoutButton.onclick = null;
+                
+                helpLink.textContent = 'REQUEST HELP';
+                helpLink.href = '/signup/';
+            }
+        });
+    } else {
+        console.warn("Firebase configuration is not available. Auth functionality will not be active.");
+    }
+  </script>
 </body>
 </html>
