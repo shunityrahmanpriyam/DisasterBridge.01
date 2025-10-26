@@ -1,7 +1,8 @@
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.conf import settings
-
+from django.contrib.auth.models import User
 
 class UserManager(BaseUserManager):
     def create_user(self, email, phone_number, name, role, password=None, **extra_fields):
@@ -76,6 +77,8 @@ class AidRequest(models.Model):
     request_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     location = models.CharField(max_length=255)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     urgency = models.CharField(
         max_length=20,
@@ -85,6 +88,16 @@ class AidRequest(models.Model):
     voice_message = models.FileField(upload_to="aid/voice/", null=True, blank=True)
     photo = models.ImageField(upload_to="aid/photos/", null=True, blank=True)
     notes = models.TextField(blank=True, null=True)
+
+    assigned_volunteer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        limit_choices_to={'role': 'volunteer'},
+        related_name='assigned_requests'
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, default="Pending")
 
@@ -140,27 +153,68 @@ class Feedback(models.Model):
 
 
 class Notification(models.Model):
+    TYPE_CHOICES = [
+        ('Aid Request', 'Aid Request'),
+        ('Donation', 'Donation'),
+        ('Volunteer Assignment', 'Volunteer Assignment'),
+        ('System', 'System'),
+    ]
+    STATUS_CHOICES = [
+        ('unread', 'Unread'),
+        ('read', 'Read'),
+    ]
+    ACTION_CHOICES = [
+        ('pending', 'Pending'),
+        ('approved', 'Approved'),
+        ('denied', 'Denied'),
+    ]
+
     notification_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    type = models.CharField(max_length=50, choices=TYPE_CHOICES)
     message = models.TextField()
-    type = models.CharField(max_length=50)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='unread')
+    action_status = models.CharField(max_length=10, choices=ACTION_CHOICES, default='pending')
     timestamp = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=50, default="unread")
 
     def __str__(self):
-        return f"Notification {self.notification_id} for {self.user.name}"
+        return f"{self.type} - {self.user.username} ({self.status})"
 
 
 class VolunteerAssignment(models.Model):
+    STATUS_CHOICES = [
+        ("assigned", "Assigned"),
+        ("in_progress", "In Progress"),
+        ("completed", "Completed"),
+    ]
+
     assignment_id = models.AutoField(primary_key=True)
-    volunteer = models.ForeignKey(User, on_delete=models.CASCADE, limit_choices_to={'role': 'volunteer'})
-    request = models.ForeignKey(AidRequest, on_delete=models.CASCADE)
-    assigned_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="assigned_by_admin")
+    volunteer = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        limit_choices_to={'role': 'volunteer'},
+        related_name="volunteer_assignments"
+    )
+    request = models.ForeignKey(
+        AidRequest,
+        on_delete=models.CASCADE,
+        related_name="assignments"
+    )
+    assigned_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="assigned_by_admin"
+    )
     assignment_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=50, default="assigned")
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default="assigned")
 
     def __str__(self):
         return f"Assignment {self.assignment_id} - {self.volunteer.name}"
+
+    class Meta:
+        unique_together = ('volunteer', 'request')
 
 
 class LiveUpdate(models.Model):
@@ -181,4 +235,3 @@ class LiveUpdate(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.location})"
-

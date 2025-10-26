@@ -1,47 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Donation History</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #fdecec;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      width: 85%;
-      margin: 30px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
-    }
-    h2 {
-      text-align: center;
-      color: #c70039;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ccc;
-      text-align: center;
-    }
-    th {
-      background: #c70039;
-      color: #fff;
-    }
-    tr:nth-child(even) {
-      background: #f8d7da;
-    }
-  </style>
-</head>
-<body>
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}My donation History - DisasterBridge{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+
+</style>
+
   <div class="container">
     <h2>My Donations</h2>
     <table>
@@ -77,3 +47,5 @@
   </div>
 </body>
 </html>
+
+{% endblock %}

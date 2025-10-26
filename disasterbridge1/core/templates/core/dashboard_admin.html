@@ -1,197 +1,109 @@
+{% extends 'core/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - DisasterBridge</title>
-    <!-- Load Bootstrap Icons for modern icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <!-- Explicitly loading Inter font for consistency -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-        /* --- Theme Colors (DisasterBridge Red) --- */
-        :root {
-            --primary: #e63946; /* DisasterBridge Red */
-            --primary-dark: #cc333d; /* Darker red for button hover */
-            --light-background: #FDF4F5; /* Page Background (Light Pink) */
-            --secondary-light: #FFFFFF; /* Sidebar/Card Background (Pure White) */
-            --light-nav-tint: #F9F9F9; /* Top Nav Background (Subtle Light Gray) */
-            --light-sidebar-hover: #F0F0F0; /* Subtle hover color */
-            --dark-text: #333333; /* Dark text color */
-        }
+{% block title %}Admin Dashboard - DisasterBridge{% endblock %}
 
-        body {
-            font-family: 'Inter', Arial, sans-serif;
+{% block content %}
+<style>
+    :root {
+        --primary: #e63946;
+        --primary-dark: #cc333d;
+        --light-background: #FDF4F5;
+        --sidebar-bg: #ffffff;
+        --text-dark: #333333;
+        --light-nav-tint: #F9F9F9;
+        --light-sidebar-hover: #F0F0F0;
+         --dark-text: #333333;
+    }
+
+    body {
+        background: var(--light-background);
+        font-family: 'Inter', Arial, sans-serif;
+         margin: 0;
+         color: var(--dark-text);
+
+    }
+
+    /* Wrapper: Sidebar + Main Content */
+    .dashboard-wrapper {
+        display: flex;
+        min-height: 100vh;
+        margin-top: 5px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 250px;
+        background: var(--light-background);
+         color: var(--dark-text);
+        box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+        padding-top: 20px;
+    }
+
+    .sidebar a {
+        text-decoration: none;
+        color: var(--text-dark);
+        padding: 18px 25px;
+        display: flex;
+        align-items: center;
+        transition: background 0.2s, padding 0.2s;
+        font-weight: 500;
+        border-left: 5px solid transparent;
+    }
+
+    .sidebar a i {
+        margin-right: 15px;
+        color: var(--primary);
+        font-size: 1.2rem;
+    }
+
+    .sidebar a:hover {
+        background: var(--light-sidebar-hover);
+        border-left: 5px solid var(--primary);
+        font-weight: 500;
+
+    }
+
+    .sidebar a.active {
+        background: var(--light-sidebar-hover);
+         padding-left: 20px;
+        border-left: 5px solid var(--primary);
+        font-weight: bold;
+    }
+
+    /* Main Content */
+    .main-content {
+        flex: 1;
+        padding: 40px;
+    }
+
+    .dashboard-header {
+    text-align: left;
+     border-bottom: 2px solid #F0F0F0;
+      margin-bottom: 30px;
+       padding-bottom: 10px;
+
+    }
+
+    .dashboard-header h2 {
+        color: var(--primary);
+        font-size: 2.2rem;
             margin: 0;
-            background: var(--light-background);
-            color: var(--dark-text);
-        }
+        font-weight: 600;
+    }
 
-        /* --- Layout: Side + Main Content --- */
-        .page-wrapper {
-            display: flex;
-            min-height: 100vh;
-            padding-top: 80px; /* Space for the fixed top navbar */
-        }
+    /* Card Grid */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-top: 30px
+    }
 
-        /* ----------------------------------------------------- */
-        /* --- TOP NAVBAR STYLING (light gray tint) --- */
-        nav.navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--light-background);
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-            padding: 10px 0;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-        }
 
-        .navbar-content-wrapper {
-            width: 90%;
-            max-width: 1200px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* Logo/Brand Styling */
-        .navbar-brand {
-            color: var(--primary) !important;
-            font-size: 1.5rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        .navbar-brand span.bridge-text {
-             color: var(--primary);
-             font-weight: 600;
-        }
-        .logo-img {
-            max-height: 40px;
-            width: auto;
-            margin-right: 8px;
-            /* The conflicting 'content' property was removed in the last revision */
-        }
-
-        /* Standard Nav Link Style */
-        .nav-link {
-            font-weight: bold;
-            margin: 0 0.75rem;
-            padding: 8px 0;
-            color: black !important;
-            text-transform: uppercase;
-            font-size: 0.95rem;
-            border-bottom: 2px solid transparent;
-            transition: color 0.2s, border-bottom 0.2s;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        /* Active Link Style (PROFILE is active in the image) */
-        .nav-link.active {
-            color: var(--primary) !important;
-            border-bottom: 2px solid var(--primary);
-            font-weight: bold;
-        }
-
-        /* Hover Link Style */
-        .nav-link:hover {
-            color: var(--primary-dark) !important;
-        }
-
-        /* LOGOUT Button Style */
-        .btn-auth {
-            background-color: var(--primary);
-            color: white !important;
-            border-radius: 8px;
-            padding: 8px 18px;
-            font-weight: bold;
-            border: none;
-            transition: background-color 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.875rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-left: 15px;
-        }
-        .btn-auth:hover {
-            background-color: var(--primary-dark);
-            box-shadow: 0 4px 8px rgba(230, 57, 70, 0.3);
-        }
-        /* ----------------------------------------------------- */
-
-        /* --- Sidebar Layout (Pure white) --- */
-       .sidebar {
-            width: 250px;
-            background: var(--light-background); /* New Light Pink background */
-            color: var(--dark-text);
-            display: flex;
-            flex-direction: column;
-            padding-top: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-        }
-        .sidebar a {
-            color: var(--dark-text);
-            text-decoration: none;
-            padding: 18px 25px;
-            display: flex;
-            align-items: center;
-            transition: background 0.2s, padding 0.2s;
-            font-weight: 500;
-            border-left: 5px solid transparent;
-        }
-        .sidebar a i {
-            margin-right: 15px;
-            font-size: 1.2rem;
-            color: var(--primary); /* Icons in primary red */
-        }
-        .sidebar a:hover {
-            background: var(--light-sidebar-hover);
-            border-left: 5px solid transparent;
-            font-weight: 500;
-        }
-        .sidebar a.active {
-            background: var(--light-sidebar-hover);
-            border-left: 5px solid var(--primary); /* Accent using DisasterBridge Red */
-            padding-left: 20px;
-            font-weight: bold;
-        }
-
-        /* --- Main Content (Dashboard) --- */
-        .main-content {
-            flex: 1;
-            padding: 40px;
-        }
-
-        .dashboard-header {
-            text-align: left;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #F0F0F0;
-            padding-bottom: 10px;
-        }
-        .dashboard-header h2 {
-            color: var(--primary);
-            font-size: 2.2rem;
-            margin: 0;
-            font-weight: 600;
-        }
-
-        /* ----------------------------------------------------- */
-        /* --- CARD GRID STYLING (Increased gap) --- */
-        .card-grid {
-            display: grid;
-            /* Default: 1 column for mobile */
-            grid-template-columns: 1fr;
-            gap: 20px; /* Base gap for mobile */
-            margin-top: 30px;
-        }
-
-        /* Medium screens (desktop) and up: 3 columns with larger gap */
+    /* Medium screens (desktop) and up: 3 columns with larger gap */
         @media (min-width: 769px) {
             .card-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -200,180 +112,119 @@
         }
         /* ----------------------------------------------------- */
 
-        /* Dashboard Card Styling */
-        .dashboard-card {
-            background-color: white;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            height: 100%;
-            text-align: center;
-            border: 1px solid #eee;
-        }
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-        .card-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            display: block;
-        }
-        .taka-icon {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1;
-            margin-bottom: 1rem;
-            display: block;
-            color: var(--primary);
-        }
-        .card-link {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--dark-text);
-            text-decoration: none;
-            display: block;
-            margin-top: 1rem;
-            transition: color 0.2s;
-        }
-        .card-link:hover {
-            color: var(--primary);
-            text-decoration: underline;
-        }
+    .dashboard-card {
+        background: #fff;
+        border-radius: 1rem ;
+        box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+        padding: 1.5rem;
+        text-align: center;
+         height: 100%;
+           border: 1px solid #eee;
 
-        /* --- Mobile Responsiveness --- */
-        @media (max-width: 768px) {
-            .page-wrapper {
-                flex-direction: column;
-                padding-top: 70px;
-            }
-            .navbar-content-wrapper {
-                width: 95%;
-            }
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
 
-            /* Top Nav Links for mobile */
-            .nav-links {
-                display: flex;
-                align-items: center;
-            }
-            .nav-links .nav-link {
-                margin: 0 0.5rem;
-            }
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    }
 
-            /* Sidebar becomes a horizontal bar on mobile */
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                justify-content: space-around;
-                padding: 0;
-                border-bottom: 2px solid var(--primary);
-                min-height: auto;
-                box-shadow: none;
-            }
-            .sidebar a {
-                padding: 15px 10px;
-                text-align: center;
-                flex-grow: 1;
-                justify-content: center;
-                border-left: none !important;
-            }
-            .sidebar a i {
-                margin-right: 0;
-                font-size: 1.5rem;
-            }
-            .sidebar a span {
-                display: none; /* Hide text on mobile sidebar */
-            }
-            .sidebar a:hover, .sidebar a.active {
-                border-left: none;
-                border-bottom: 3px solid var(--primary); /* Use bottom border on mobile */
-                background: var(--light-sidebar-hover);
-            }
+    .dashboard-card i {
+        font-size: 3rem;
+        color: var(--primary);
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+    }
 
-            .main-content {
-                padding: 20px;
-            }
+    .dashboard-card .taka-icon {
+        font-size: 3rem;
+        color: var(--primary);
+        font-weight: bold;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .dashboard-card a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 700;
+        font-size: 1.1rem;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .dashboard-card a:hover {
+        color: var(--primary);
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-wrapper {
+            flex-direction: column;
         }
-    </style>
-</head>
-<body>
-    <!-- Top Navbar - Fixed, light gray tint -->
- <nav class="navbar">
-        <div class="navbar-content-wrapper">
-            <!-- Logo/Brand (Font weights and colors updated) -->
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'core/images/logo.png' %}"
-                     alt="DisasterBridge Logo"
-                     class="logo-img"
-                     onerror="this.onerror=null; this.src='https://placehold.co/40x40/e63946/ffffff?text=DB';"
-                >
-                Disaster<span class="bridge-text">Bridge</span>
-            </a>
+        .sidebar {
+            width: 100%;
+            flex-direction: row;
+            justify-content: space-around;
+            border-bottom: 2px solid var(--primary);
+        }
+        .sidebar a {
+            padding: 10px;
+            border-left: none;
+            border-bottom: 3px solid transparent;
+        }
+        .sidebar a.active {
+            border-bottom: 3px solid var(--primary);
+        }
+        .main-content {
+            padding: 20px;
+        }
+    }
+</style>
 
-            <!-- Links container -->
-            <div class="nav-links">
-                <a href="{% url 'home' %}" class="nav-link">HOME</a>
-                <!-- PROFILE Link (Set as active for this context) -->
-                <a href="{% url 'user_profile' %}" class="nav-link active">PROFILE</a>
-                <!-- LOGOUT Button (styled with btn-auth) -->
-                <a href="{% url 'logout' %}" class="btn-auth">LOGOUT</a>
-            </div>
-        </div>
-    </nav>
+<div class="dashboard-wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="{% url 'user_profile' %}">
+            <i class="bi bi-person-circle"></i><span>Profile</span>
+        </a>
+        <a href="{% url 'dashboard' %}" class="active">
+            <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+        </a>
+        <a href="{% url 'notification_list' %}">
+            <i class="bi bi-bell"></i><span>Notifications</span>
+        </a>
+        <a href="{% url 'help_page' %}">
+            <i class="bi bi-question-circle"></i><span>Help</span>
+        </a>
+    </div>
 
-    <div class="page-wrapper">
-        <!-- Left Sidebar (Pure white) -->
-        <div class="sidebar">
-            <!-- DASHBOARD is the current page, so it is active here -->
-            <a href="{% url 'user_profile' %}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-            <a href="{% url 'dashboard' %}" class="active"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-            <a href="#"><i class="bi bi-question-circle"></i><span>Help</span></a>
-            <a href="{% url 'notification_list' %}"><i class="bi bi-bell"></i><span>Notifications</span></a>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>Admin Dashboard</h2>
+            <p class="text-muted">Manage users, aid requests, and donations.</p>
         </div>
 
-        <!-- Main Content (Admin Dashboard) -->
-        <div class="main-content container-fluid">
-            <div class="dashboard-header">
-                <h2>Admin Dashboard</h2>
+        <div class="card-grid">
+            <div class="dashboard-card">
+                <i class="bi bi-people"></i>
+                <a href="{% url 'user_list' %}">Manage Users</a>
+                <p class="text-muted small mt-2">View, edit, and manage all registered accounts.</p>
             </div>
 
-            <p class="lead text-muted">Manage users, view aid requests, and track financial information below.</p>
+            <div class="dashboard-card">
+                <i class="bi bi-chat-square-text"></i>
+                <a href="{% url 'aidrequest_list' %}">View Aid Requests</a>
+                <p class="text-muted small mt-2">Process and monitor pending aid submissions.</p>
+            </div>
 
-            <!-- Dashboard Cards Grid (Now with explicit, larger gaps) -->
-            <div class="card-grid">
-
-                <!-- Card 1: Manage Users -->
-                <div class="col-card">
-                    <div class="dashboard-card">
-                        <i class="bi bi-people card-icon"></i>
-                        <a href="{% url 'user_list' %}" class="card-link">Manage Users</a>
-                        <p class="text-muted small mt-2">View, edit, and manage all registered accounts.</p>
-                    </div>
-                </div>
-
-                <!-- Card 2: View Aid Requests -->
-                <div class="col-card">
-                    <div class="dashboard-card">
-                        <i class="bi bi-chat-square-text card-icon"></i>
-                        <a href="{% url 'aidrequest_list' %}" class="card-link">View Aid Requests</a>
-                        <p class="text-muted small mt-2">Process and monitor pending aid submissions.</p>
-                    </div>
-                </div>
-
-                <!-- Card 3: Donation Info -->
-                <div class="col-card">
-                    <div class="dashboard-card">
-                        <!-- Bangladesh Taka Symbol (৳) -->
-                        <span class="taka-icon">&#x09F3;</span>
-                        <a href="{% url 'donationinfo' %}" class="card-link">Donation Info (BDT)</a>
-                        <p class="text-muted small mt-2">Review financial summaries and donation statistics.</p>
-                    </div>
-                </div>
-
+            <div class="dashboard-card">
+                <span class="taka-icon">&#x09F3;</span>
+                <a href="{% url 'donation_list' %}">Donation Info (BDT)</a>
+                <p class="text-muted small mt-2">Review financial summaries and donation statistics.</p>
             </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,3 +1,4 @@
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
@@ -56,12 +57,14 @@ class DonationForm(forms.ModelForm):
 class AidRequestForm(forms.ModelForm):
     class Meta:
         model = AidRequest
-        fields = ["location", "category", "urgency", "voice_message", "photo", "notes"]
-
+        fields = ["location", "latitude", "longitude", "category", "urgency", "voice_message", "photo", "notes"]
+        widgets = {
+            'latitude': forms.HiddenInput(),
+            'longitude': forms.HiddenInput(),
+        }
 
 class LiveUpdateForm(forms.ModelForm):
     class Meta:
         model = LiveUpdate
         fields = ["category", "title", "description", "volunteer_name", "location", "image"]
-
 

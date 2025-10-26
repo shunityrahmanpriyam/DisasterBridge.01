@@ -1,3 +1,11 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}About - DisasterBridge{% endblock %}
+
+{% block content %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,34 +130,34 @@
 </head>
 <body class="d-flex flex-column">
 
-<!-- Navbar -->
-<nav class="navbar">
-    <div class="container-xl d-flex">
-        <!-- Logo link: Set to explicit root path (/) -->
-        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">
-            <!-- Custom Logo SVG placeholder -->
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2" style="color: #e63946;">
-                <path d="M12 2L2 12L12 22L22 12L12 2Z" fill="currentColor"/>
-                <path d="M12 5.5L5.5 12L12 18.5L18.5 12L12 5.5Z" fill="#ffffff"/>
-            </svg>
-            Disaster<span class="fw-normal">Bridge</span>
-        </a>
+<!--&lt;!&ndash; Navbar &ndash;&gt;-->
+<!--<nav class="navbar">-->
+<!--    <div class="container-xl d-flex">-->
+<!--        &lt;!&ndash; Logo link: Set to explicit root path (/) &ndash;&gt;-->
+<!--        <a class="navbar-brand fw-bold d-flex align-items-center" href="/">-->
+<!--            &lt;!&ndash; Custom Logo SVG placeholder &ndash;&gt;-->
+<!--            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="me-2" style="color: #e63946;">-->
+<!--                <path d="M12 2L2 12L12 22L22 12L12 2Z" fill="currentColor"/>-->
+<!--                <path d="M12 5.5L5.5 12L12 18.5L18.5 12L12 5.5Z" fill="#ffffff"/>-->
+<!--            </svg>-->
+<!--            Disaster<span class="fw-normal">Bridge</span>-->
+<!--        </a>-->
 
-        <!-- Links container always visible and aligned right -->
-        <div class="d-flex align-items-center ms-auto">
-            <!-- Home Link -->
-            <a href="/" class="nav-link">HOME</a>
-            <!-- Corrected link for 'REQUEST HELP' -->
-            <a href="/request-help" class="nav-link">REQUEST HELP</a>
-            <!-- Corrected link for 'DONATE' (Set to /donatenow) -->
-            <a href="/donationinfo" class="nav-link">DONATE</a>
-            <!-- Corrected link for 'VOLUNTEER' -->
-            <a href="/volunteer" class="nav-link">VOLUNTEER</a>
-            <!-- Corrected link for 'SIGN IN/LOGIN' -->
-            <a href="/login" class="btn-login ms-3">SIGN IN/ LOGIN</a>
-        </div>
-    </div>
-</nav>
+<!--        &lt;!&ndash; Links container always visible and aligned right &ndash;&gt;-->
+<!--        <div class="d-flex align-items-center ms-auto">-->
+<!--            &lt;!&ndash; Home Link &ndash;&gt;-->
+<!--            <a href="/" class="nav-link">HOME</a>-->
+<!--            &lt;!&ndash; Corrected link for 'REQUEST HELP' &ndash;&gt;-->
+<!--            <a href="/request-help" class="nav-link">REQUEST HELP</a>-->
+<!--            &lt;!&ndash; Corrected link for 'DONATE' (Set to /donatenow) &ndash;&gt;-->
+<!--            <a href="/donationinfo" class="nav-link">DONATE</a>-->
+<!--            &lt;!&ndash; Corrected link for 'VOLUNTEER' &ndash;&gt;-->
+<!--            <a href="/volunteer" class="nav-link">VOLUNTEER</a>-->
+<!--            &lt;!&ndash; Corrected link for 'SIGN IN/LOGIN' &ndash;&gt;-->
+<!--            <a href="/login" class="btn-login ms-3">SIGN IN/ LOGIN</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
 
 <!-- About Us Section -->
 <section class="about-section container-lg">
@@ -186,35 +194,37 @@
     </div>
 </section>
 
-<!-- Footer -->
-<footer class="text-center">
-    <div class="container-xl">
-        <!-- Navigation Buttons -->
-        <div class="mb-3">
-            <!-- Corrected footer links to use explicit root paths -->
-            <a href="/about" class="footer-btn active">ABOUT</a> |
-            <a href="/contact" class="footer-btn">CONTACT INFO</a> |
-            <a href="/faq" class="footer-btn">HELP/FAQ</a>
-        </div>
+<!--&lt;!&ndash; Footer &ndash;&gt;-->
+<!--<footer class="text-center">-->
+<!--    <div class="container-xl">-->
+<!--        &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+<!--        <div class="mb-3">-->
+<!--            &lt;!&ndash; Corrected footer links to use explicit root paths &ndash;&gt;-->
+<!--            <a href="/about" class="footer-btn active">ABOUT</a> |-->
+<!--            <a href="/contact" class="footer-btn">CONTACT INFO</a> |-->
+<!--            <a href="/faq" class="footer-btn">HELP/FAQ</a>-->
+<!--        </div>-->
 
-        <!-- Social Media Buttons -->
-        <div class="mb-3">
-            <a href="https://facebook.com/disasterbridge" target="_blank" class="social-btn" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a href="https://instagram.com/disasterbridge" target="_blank" class="social-btn" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-            <a href="https://twitter.com/disasterbridge" target="_blank" class="social-btn" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-            <a href="https://linkedin.com/company/disasterbridge" target="_blank" class="social-btn" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-        </div>
+<!--        &lt;!&ndash; Social Media Buttons &ndash;&gt;-->
+<!--        <div class="mb-3">-->
+<!--            <a href="https://facebook.com/disasterbridge" target="_blank" class="social-btn" aria-label="Facebook"><i class="bi bi-facebook"></i></a>-->
+<!--            <a href="https://instagram.com/disasterbridge" target="_blank" class="social-btn" aria-label="Instagram"><i class="bi bi-instagram"></i></a>-->
+<!--            <a href="https://twitter.com/disasterbridge" target="_blank" class="social-btn" aria-label="Twitter"><i class="bi bi-twitter"></i></a>-->
+<!--            <a href="https://linkedin.com/company/disasterbridge" target="_blank" class="social-btn" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>-->
+<!--        </div>-->
 
-        <!-- Legal -->
-        <p class="text-muted small mb-0">
-            &copy; 2025 DisasterBridge. All rights reserved. <br>
-            <!-- Corrected legal links to use explicit root paths -->
-            <a href="/privacy" class="text-danger">Privacy Policy</a> | <a href="/terms" class="text-danger">Terms of Service</a>
-        </p>
-    </div>
-</footer>
+<!--        &lt;!&ndash; Legal &ndash;&gt;-->
+<!--        <p class="text-muted small mb-0">-->
+<!--            &copy; 2025 DisasterBridge. All rights reserved. <br>-->
+<!--            &lt;!&ndash; Corrected legal links to use explicit root paths &ndash;&gt;-->
+<!--            <a href="/privacy" class="text-danger">Privacy Policy</a> | <a href="/terms" class="text-danger">Terms of Service</a>-->
+<!--        </p>-->
+<!--    </div>-->
+<!--</footer>-->
 
 <!-- Load Bootstrap 5 JS Bundle (required for functionality, though none is custom here) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}user Help & Support - DisasterBridge{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+
+
+
+
+</style>
+
+
+<div class="container py-5">
+  <h2 class="text-danger mb-4 text-center fw-bold">Help & Support</h2>
+  <p class="text-center text-muted mb-5">Find answers, get guidance, or contact our support team.</p>
+
+  {% if role == 'victim' %}
+  <section>
+    <h4 class="text-danger">For Victims</h4>
+    <ul>
+      <li>📝 <b>Submit Aid Request:</b> Go to “Request Aid” in your dashboard.</li>
+      <li>📍 <b>Location Tips:</b> Always allow location access for accurate help.</li>
+      <li>📦 <b>Track Status:</b> Check the status under “My Requests”.</li>
+      <li>☎️ <b>Emergency:</b> Call <b>999</b> or your local Disaster Helpline.</li>
+    </ul>
+  </section>
+  {% elif role == 'volunteer' %}
+  <section>
+    <h4 class="text-danger">For Volunteers</h4>
+    <ul>
+      <li>✅ <b>Assigned Requests:</b> View them in your dashboard.</li>
+      <li>🚚 <b>Mark Complete:</b> After successful delivery, mark the request as “Delivered”.</li>
+      <li>⚠️ <b>Problem?</b> Use the contact form below to report issues.</li>
+    </ul>
+  </section>
+  {% elif role == 'donor' %}
+  <section>
+    <h4 class="text-danger">For Donors</h4>
+    <ul>
+      <li>💰 <b>Make a Donation:</b> Visit the “Donate Now” page.</li>
+      <li>📄 <b>View Donation History:</b> From your dashboard, check your donations.</li>
+      <li>🎁 <b>Support Specific Causes:</b> Select requests you want to support.</li>
+    </ul>
+  </section>
+  {% elif role == 'admin' %}
+  <section>
+    <h4 class="text-danger">For Admins</h4>
+    <ul>
+      <li>📊 <b>Dashboard:</b> Manage all aid requests and user roles.</li>
+      <li>🔔 <b>Notifications:</b> View user requests and volunteer updates.</li>
+      <li>🧾 <b>Reports:</b> Generate system-wide donation and request summaries.</li>
+    </ul>
+  </section>
+  {% else %}
+  <section>
+    <h4 class="text-danger">General Help</h4>
+    <p>Please log in to see personalized help information.</p>
+  </section>
+  {% endif %}
+
+  <hr class="my-5">
+
+  <section>
+    <h4 class="text-danger mb-3">Contact Support</h4>
+    <p class="text-muted">If you’re facing an issue, send us a message below:</p>
+    <form method="post" action="#">
+      {% csrf_token %}
+      <div class="mb-3">
+        <textarea name="message" class="form-control" rows="4" placeholder="Describe your issue..."></textarea>
+      </div>
+      <button class="btn btn-danger px-4" type="submit">Send Message</button>
+    </form>
+  </section>
+</div>
+
+
+
+{% endblock %}

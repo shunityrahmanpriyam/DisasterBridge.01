@@ -1,0 +1,81 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Donation List - DisasterBridge{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+
+</style>
+
+
+<div class="container my-5">
+    <h2 class="mb-4 text-success fw-bold">All Donations</h2>
+
+    {% if donations %}
+        <table class="table table-bordered table-hover">
+            <thead class="table-success">
+                <tr>
+                    <th>ID</th>
+                    <th>Donor</th>
+                    <th>Type</th>
+                    <th>Amount / Items</th>
+                    <th>Payment Method</th>
+                    <th>Receipt</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for donation in donations %}
+                <tr>
+                    <!-- Primary Key as ID -->
+                    <td>{{ donation.id }}</td>
+
+                    <!-- Donor info -->
+                    <td>{{ donation.donor.name }} ({{ donation.donor.email }})</td>
+
+                    <!-- Donation type -->
+                    <td>{{ donation.donation_type|title }}</td>
+
+                    <!-- Amount or items -->
+                    <td>
+                        {% if donation.donation_type == "money" %}
+                            ${{ donation.amount }}
+                        {% else %}
+                            <strong>{{ donation.items_title }}</strong><br>
+                            {{ donation.items_description }}
+                        {% endif %}
+                    </td>
+
+                    <!-- Payment Method -->
+                    <td>{{ donation.payment_method|default:"N/A"|title }}</td>
+
+                    <!-- Receipt Number -->
+                    <td>{{ donation.receipt_number|default:"N/A" }}</td>
+
+                    <!-- Status -->
+                    <td>{{ donation.status|title }}</td>
+
+                    <!-- Date (null safe) -->
+                    <td>
+                        {% if donation.created_at %}
+                            {{ donation.created_at|date:"M d, Y H:i" }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">No donations found.</div>
+    {% endif %}
+</div>
+
+{% endblock %}

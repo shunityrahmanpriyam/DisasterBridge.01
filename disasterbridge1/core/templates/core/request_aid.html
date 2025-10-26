@@ -1,52 +1,130 @@
+
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Request for Aid - DisasterBridge{% endblock %}
+
+{% block content %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Aid - DisasterBridge</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
-<body>
+<body style="background-color:#f8f9fa;">
 
-</body>
-</h{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Request Aid</title>
-  <link rel="stylesheet" href="{% static 'core/styles.css' %}">
-</head>
-<body>
-  <h1>REQUEST AID</h1>
+<!--    &lt;!&ndash; Navbar &ndash;&gt;-->
+<!--    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">-->
+<!--        <div class="container">-->
+<!--            <a class="navbar-brand fw-bold" href="/">DisasterBridge</a>-->
+<!--            <ul class="navbar-nav ms-auto">-->
 
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    <label>Location</label>
-    {{ form.location }}
+<!--                <li class="nav-item"><a class="nav-link active" href="/request-aid/">Request Help</a></li>-->
 
-    <label>Category</label>
-    {{ form.category }}
+<!--                <li class="nav-item"><a class="btn btn-light btn-sm ms-2" href="/profile/">Profile</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </nav>-->
 
-    <label>Urgency</label>
-    {{ form.urgency }}
+    <!-- Request Form -->
+    <div class="container mt-5 mb-5">
+        <div class="card shadow p-4">
+            <h2 class="text-center mb-4 text-danger fw-bold">🚨 Request Aid</h2>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Location</label>
+                    {{ form.location }}
+                </div>
+                <div id="map" style="height: 300px; border:1px solid #ccc; border-radius:8px;"></div>
+                <p class="text-muted mt-2">🗺️ Type your location or move the marker to select the correct area.</p>
 
-    <label>Upload Voice Message</label>
-    {{ form.voice_message }}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Category</label>
+                    {{ form.category }}
+                </div>
 
-    <label>Upload Photo</label>
-    {{ form.photo }}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Urgency</label>
+                    {{ form.urgency }}
+                </div>
 
-    <label>Additional Notes</label>
-    {{ form.notes }}
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Upload Voice Message</label>
+                    {{ form.voice_message }}
+                </div>
 
-    <button type="submit">Submit Request</button>
-  </form>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Upload Photo</label>
+                    {{ form.photo }}
+                </div>
 
-  <p>
-    If you or your family are affected by disaster, provide your location, type of help,
-    urgency, and any notes/photos. Once submitted, you’ll receive a Request ID
-    to track your request in <strong>My Requests</strong>.
-  </p>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Additional Notes</label>
+                    {{ form.notes }}
+                </div>
+
+                <button type="submit" class="btn btn-danger w-100">Submit Request</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <!-- Bootstrap & Leaflet JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const locationInput = document.querySelector("#id_location");
+        const map = L.map("map").setView([23.8103, 90.4125], 10); // Default: Dhaka
+        const marker = L.marker([23.8103, 90.4125], { draggable: true }).addTo(map);
+
+        // Tile layer (OpenStreetMap)
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Marker drag event
+        marker.on("dragend", function () {
+            const latlng = marker.getLatLng();
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latlng.lat}&lon=${latlng.lng}`)
+                .then(response => response.json())
+                .then(data => {
+                    locationInput.value = data.display_name || `${latlng.lat}, ${latlng.lng}`;
+                });
+        });
+
+        // Location text input search
+        locationInput.addEventListener("change", function () {
+            const query = locationInput.value;
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const lat = data[0].lat;
+                        const lon = data[0].lon;
+                        map.setView([lat, lon], 13);
+                        marker.setLatLng([lat, lon]);
+                    } else {
+                        alert("Location not found!");
+                    }
+                });
+        });
+    });
+    </script>
 </body>
 </html>
 
-tml>
+{% endblock %}

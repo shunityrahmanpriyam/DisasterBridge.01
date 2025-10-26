@@ -1,17 +1,13 @@
+{% extends 'core/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <!-- Load Bootstrap Icons for modern icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <!-- Explicitly loading Inter font for consistency -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+{% block title %}User Profile - DisasterBridge{% endblock %}
+
+{% block content %}
 
 
-    <style>
+
+<style>
         /* --- Theme Colors (DisasterBridge Red) --- */
         :root {
             --primary: #e63946; /* DisasterBridge Red */
@@ -356,188 +352,113 @@
             }
         }
     </style>
-</head>
-<body>
-    <!-- Top Navbar - Fixed Position -->
-    <nav class="navbar">
-        <div class="navbar-content-wrapper">
-            <!-- Logo/Brand (Fixed logo size for better fit) -->
-            <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'core/images/logo.png' %}"
-                     alt="DisasterBridge Logo"
-                     class="logo-img"
-                     onerror="this.onerror=null; this.src='https://placehold.co/40x40/e63946/ffffff?text=DB';"
-                >
-                Disaster<span class="bridge-text">Bridge</span>
-            </a>
 
-            <!-- Links container -->
-            <div class="nav-links">
-                <a href="{% url 'home' %}" class="nav-link">HOME</a>
-                <!-- PROFILE Link (Set as active for this context) -->
-                <a href="{% url 'user_profile' %}" class="nav-link active">PROFILE</a>
-                <!-- LOGOUT Button (styled with btn-auth) -->
-                <a href="{% url 'logout' %}" class="btn-auth">LOGOUT</a>
-            </div>
-        </div>
-    </nav>
+<div class="content-area d-flex" style="margin-top: 0.5px;">
 
-    <!-- NEW CONTENT AREA WRAPPER -->
-    <div class="content-area">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <a href="{% url 'user_profile' %}" class="active"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-            <a href="{% url 'dashboard' %}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-            <a href="#"><i class="bi bi-question-circle"></i><span>Help</span></a>
-            <a href="{% url 'notification_list' %}"><i class="bi bi-bell"></i><span>Notifications</span></a>
-        </div>
 
-        <!-- Profile Content -->
-        <div class="main-content">
-            <div class="profile-header">
-                <h2>Edit Profile for {{ user.name }}</h2>
-            </div>
-
-            <!-- Form for Profile Editing -->
-            <form id="profile-edit-form" method="post">
-                {% csrf_token %}
-
-                <div class="profile-info">
-                    <table>
-                        <tr>
-                            <th>User ID</th>
-                            <!-- Read-only field -->
-                            <td><span class="read-only">{{ user.user_id }}</span></td>
-                        </tr>
-                        <tr>
-                            <th>Name</th>
-                            <!-- Read-only field -->
-                            <td><span class="read-only">{{ user.name }}</span></td>
-                        </tr>
-
-                        <tr>
-                            <th>Email</th>
-                            <td>
-                                <!-- Editable field -->
-                                <input type="email" id="user-email" name="email" value="{{ user.email }}" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Phone</th>
-                            <td>
-                                <input type="tel" id="user-phone" name="phone_number" value="{{ user.phone_number }}" placeholder="e.g., +1 555-123-4567">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Role</th>
-                            <!-- Read-only field -->
-                            <td>
-                                <span class="read-only">{{ user.get_role_display }}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Language</th>
-                            <td>
-                                <select id="user-language" name="language_preference" required>
-                                    <option value="en" {% if user.language_preference == 'en' %}selected{% endif %}>English (en)</option>
-                                    <option value="bn" {% if user.language_preference == 'bn' %}selected{% endif %}>Bengali (bn)</option>
-                                </select>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Verified Status</th>
-                            <!-- Read-only field -->
-                            <td>
-                                <span class="read-only">{{ user.verification_status }}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Date Registered</th>
-                            <!-- Read-only field with Django date formatting -->
-                            <td>
-                                <span class="read-only">{{ user.date_registered|date:"M j, Y, h:i a" }}</span>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <div class="action-bar">
-                        <button type="submit" class="save-button">
-                            <i class="bi bi-save"></i> Save Changes
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <a href="{% url 'user_profile' %}" class="active">
+            <i class="bi bi-person-circle"></i><span>Profile</span>
+        </a>
+        <a href="{% url 'dashboard' %}">
+            <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+        </a>
+        <a href="{% url 'notification_list' %}">
+            <i class="bi bi-bell"></i><span>Notifications</span>
+        </a>
+        <a href="/help/"><i class="bi bi-question-circle"></i><span>Help</span></a>
     </div>
 
-    <script>
-        // NOTE: This client-side script is for demonstration only.
+    <!-- Profile Content -->
+    <div class="main-content flex-fill px-4 py-4" style="background: var(--light-background);">
+        <div class="profile-header mb-4">
+            <h2 class="fw-semibold text-danger">Edit Profile for {{ user.name }}</h2>
+        </div>
 
-        const form = document.getElementById('profile-edit-form');
+        <!-- Profile Edit Form -->
+        <form id="profile-edit-form" method="post">
+            {% csrf_token %}
 
-        /**
-         * Simple function to notify the user that the form submission has occurred.
-         */
-        function handleSave(event) {
-            // event.preventDefault(); // Uncomment this line if you want to test the form without submitting/reloading.
+            <div class="profile-info bg-white border rounded-4 shadow-sm overflow-hidden">
+                <table class="w-100">
+                    <tr>
+                        <th>User ID</th>
+                        <td><span class="read-only">{{ user.user_id }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td><span class="read-only">{{ user.email }}</span></td>
+                    </tr>
+                    <tr><th>Name</th><td><input type="text" name="name" value="{{ user.name }}" required></td></tr>
+                    <tr>
+                        <th>Phone</th>
+                        <td>
+                            <input type="tel" id="user-phone" name="phone_number" value="{{ user.phone_number }}" placeholder="e.g., +8801XXXXXXXXX">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Role</th>
+                        <td><span class="read-only">{{ user.get_role_display }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Language</th>
+                        <td>
+                            <select id="user-language" name="language_preference" required>
+                                <option value="en" {% if user.language_preference == 'en' %}selected{% endif %}>English (en)</option>
+                                <option value="bn" {% if user.language_preference == 'bn' %}selected{% endif %}>Bengali (bn)</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Verified Status</th>
+                        <td><span class="read-only">{{ user.verification_status }}</span></td>
+                    </tr>
+                    <tr>
+                        <th>Date Registered</th>
+                        <td><span class="read-only">{{ user.date_registered|date:"M j, Y, h:i a" }}</span></td>
+                    </tr>
+                </table>
 
-            // Get form data (example of how to access it in JS if needed)
-            const formData = new FormData(form);
-            const email = formData.get('email');
+                <div class="action-bar text-end border-top mt-3 pt-3 pe-3">
+                    <button type="submit" class="save-button btn btn-danger px-4 py-2 fw-semibold">
+                        <i class="bi bi-save"></i> Save Changes
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-            // Use the custom alert instead of the native one
-            customAlert(`Attempting to save profile changes for ${email}...`);
-        }
+<!-- Optional JS for form alert -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('profile-edit-form');
+    form?.addEventListener('submit', (e) => {
+        // Uncomment below if you don’t want to reload
+        // e.preventDefault();
+        const email = form.email.value;
+        showAlert(`Attempting to save changes for ${email}...`);
+    });
+});
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Add the 'Name' row, which you requested earlier, to the table
-            // This is just a script-side safety net for the live preview.
-
-            if (form) {
-                form.addEventListener('submit', handleSave);
-            }
-
-            // Logic to ensure the header text looks correct in the preview environment
-            const h2 = document.querySelector('.profile-header h2');
-            const match = h2.textContent.match(/Edit Profile for (.*)/);
-            if (match && match[1] && match[1].trim() === "") {
-                h2.innerHTML = '<h2>Edit Profile for <span id="user-name">Guest User</span></h2>';
-            }
-        });
-
-        // A custom, non-blocking alert function for the live preview environment
-        function customAlert(message) {
-            let messageBox = document.getElementById('custom-alert');
-
-            if (!messageBox) {
-                messageBox = document.createElement('div');
-                messageBox.id = 'custom-alert';
-                messageBox.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: #f8d7da; /* Light Red/Error Color */
-                    color: #721c24; /* Dark Red text */
-                    border: 1px solid #f5c6cb;
-                    padding: 15px 20px;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-                    z-index: 10000;
-                    opacity: 0;
-                    transition: opacity 0.5s;
-                    font-weight: 500;
-                `;
-                document.body.appendChild(messageBox);
-            }
-
-            messageBox.textContent = message;
-            messageBox.style.opacity = 1;
-
-            setTimeout(() => {
-                messageBox.style.opacity = 0;
-            }, 3000);
-        }
-
-    </script>
-</body>
-</html>
+function showAlert(message) {
+    let alertBox = document.getElementById('custom-alert');
+    if (!alertBox) {
+        alertBox = document.createElement('div');
+        alertBox.id = 'custom-alert';
+        alertBox.style.cssText = `
+            position: fixed; top: 20px; right: 20px;
+            background: #f8d7da; color: #721c24;
+            border: 1px solid #f5c6cb; padding: 12px 20px;
+            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 9999; opacity: 0; transition: opacity 0.4s;
+        `;
+        document.body.appendChild(alertBox);
+    }
+    alertBox.textContent = message;
+    alertBox.style.opacity = 1;
+    setTimeout(() => (alertBox.style.opacity = 0), 3000);
+}
+</script>
+{% endblock %}

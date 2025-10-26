@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Update request status - DisasterBridge{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+
+</style>
+
+<h2>Update Request Status</h2>
+
+<p><strong>Request ID:</strong> {{ req.pk }}</p>
+<p><strong>Location:</strong> {{ req.location }}</p>
+<p><strong>Category:</strong> {{ req.category }}</p>
+
+<form method="post">
+  {% csrf_token %}
+  <label>Change Status:</label>
+  <select name="status" class="form-select">
+    <option value="Pending" {% if req.status == "Pending" %}selected{% endif %}>Pending</option>
+    <option value="In Progress" {% if req.status == "In Progress" %}selected{% endif %}>In Progress</option>
+    <option value="Completed" {% if req.status == "Completed" %}selected{% endif %}>Completed</option>
+  </select>
+  <button type="submit" class="btn btn-success mt-2">Update</button>
+</form>
+
+{% endblock %}

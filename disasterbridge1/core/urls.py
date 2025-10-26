@@ -1,3 +1,4 @@
+
 from django.urls import path
 from . import views
 
@@ -21,7 +22,9 @@ urlpatterns = [
     path("notifications/", views.notification_list, name="notification_list"),
     path("notifications/add/", views.add_notification, name="add_notification"),
     path("notifications/delete/<int:notif_id>/", views.delete_notification, name="delete_notification"),
-    path("notifications/mark/<int:notif_id>/", views.mark_as_read, name="mark_as_read"),
+    path('notifications/<int:notification_id>/read/', views.mark_as_read, name='mark_as_read'),
+    path('notifications/<int:notification_id>/approve/', views.approve_notification, name='approve_notification'),
+    path('notifications/<int:notification_id>/deny/', views.deny_notification, name='deny_notification'),
 
     # VolunteerAssignment
     path("assignments/", views.volunteerassignment_list, name="volunteerassignment_list"),
@@ -50,5 +53,8 @@ path("request-aid/", views.request_aid, name="request_aid"),
     path("privacy/", views.privacy_policy, name="privacy"),
     path("terms/", views.terms_of_service, name="terms"),
 
+path('assigned-requests/', views.assigned_requests, name='assigned_requests'),
+path('update-status/<int:pk>/', views.update_request_status, name='update_request_status'),
 
+    path('help/', views.help_page, name='help_page'),
 ]

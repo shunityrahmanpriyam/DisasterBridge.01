@@ -1,3 +1,18 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Notification - DisasterBridge{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+
+</style>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,33 +20,34 @@
     <title>Notification Center</title>
 </head>
 <body>
+<div class="container my-5">
+    <h2 class="mb-4">🔔 Notification Center</h2>
 
-<h2>🔔 Notification Center</h2>
+    {% if notifications %}
+        {% for n in notifications %}
+        <div class="p-3 mb-3 rounded shadow-sm"
+             style="border-left:5px solid {% if n.action_status == 'approved' %}#198754{% elif n.action_status == 'denied' %}#dc3545{% else %}#ffc107{% endif %};
+                    background-color:{% if n.status == 'unread' %}#fff3f3{% else %}#f9f9f9{% endif %};">
 
-<div>
-    {% for n in notifications %}
-        <div style="border:1px solid #ddd; padding:10px; margin-bottom:10px;
-                    {% if n.status == 'unread' %}background:#ffe6e6;{% else %}background:#f9f9f9;{% endif %}">
-            <strong>{{ n.type }}</strong><br>
-            {{ n.message }} <br>
-            <small>{{ n.timestamp|timesince }} ago</small><br>
+            <strong>{{ n.type }}</strong>
+            <p>{{ n.message }}</p>
+            <small class="text-muted">{{ n.timestamp|date:"Y-m-d H:i" }}</small><br>
 
-            {% if n.status == "unread" and user.role != "admin" %}
-                <a href="{% url 'mark_as_read' n.notification_id %}">Mark as read</a>
+            {% if user.role == "admin" and n.action_status == "pending" %}
+                <a href="{% url 'approve_notification' n.notification_id %}" class="btn btn-success btn-sm">Approve</a>
+                <a href="{% url 'deny_notification' n.notification_id %}" class="btn btn-danger btn-sm">Deny</a>
             {% endif %}
 
-            {% if user.role == "admin" %}
-                <a href="{% url 'delete_notification' n.notification_id %}" style="color:red">Delete</a>
+            {% if user.role != "admin" and n.status == "unread" %}
+                <a href="{% url 'mark_as_read' n.notification_id %}" class="btn btn-outline-secondary btn-sm">Mark as read</a>
             {% endif %}
         </div>
-    {% empty %}
-        <p>No notifications available.</p>
-    {% endfor %}
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">No notifications available.</div>
+    {% endif %}
 </div>
-
-{% if user.role == "Admin" %}
-    <a href="{% url 'add_notification' %}" style="background:red;color:white;padding:8px 12px;border-radius:6px;">Add Notification</a>
-{% endif %}
 
 </body>
 </html>
+{% endblock %}

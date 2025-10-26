@@ -1,62 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Donor Dashboard</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #fdecec;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      width: 70%;
-      margin: 40px auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      text-align: center;
-    }
-    h2 {
-      color: #c70039;
-      margin-bottom: 10px;
-    }
-    p {
-      font-size: 16px;
-      color: #444;
-    }
-    .link-boxes {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      margin-top: 40px;
-    }
-    .box {
-      background: #f8d7da;
-      padding: 25px 40px;
-      border-radius: 10px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.15);
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-    .box a {
-      text-decoration: none;
-      font-size: 18px;
-      font-weight: bold;
-      color: #c70039;
-    }
-    .box:hover {
-      background: #c70039;
-      transform: translateY(-5px);
-    }
-    .box:hover a {
-      color: #fff;
-    }
-  </style>
-</head>
-<body>
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Donor Dashboard - DisasterBridge{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+
+</style>
+
+
   <div class="container">
     <h2>Donor Dashboard</h2>
     <p>Welcome {{ user.username }}! Thank you for supporting.</p>
@@ -70,5 +26,4 @@
       </div>
     </div>
   </div>
-</body>
-</html>
+{% endblock %}

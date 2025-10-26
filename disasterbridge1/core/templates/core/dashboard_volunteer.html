@@ -1,7 +1,51 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Volunteer Dashboard - DisasterBridge{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+
+</style>
+
+
 <h2>Volunteer Dashboard</h2>
 <p>Welcome {{ user.name }}! Here are your assignments.</p>
-<ul>
-    <li><a href="#">Assigned Requests</a></li>
-    <li><a href="#">Update Status</a></li>
 
-</ul>
+
+<!-- Assigned Requests Table -->
+<h3>My Assigned Requests</h3>
+{% if assigned_requests %}
+<table border="1" cellpadding="8">
+    <tr>
+        <th>ID</th>
+        <th>Location</th>
+        <th>Category</th>
+        <th>Urgency</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    {% for req in assigned_requests %}
+    <tr>
+        <td>{{ req.request_id }}</td>
+        <td>{{ req.location }}</td>
+        <td>{{ req.category }}</td>
+        <td>{{ req.urgency }}</td>
+        <td>{{ req.status }}</td>
+        <td>
+            <a href="{% url 'update_request_status' req.pk %}" class="btn btn-sm btn-warning">
+                Update Status
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No requests assigned yet.</p>
+{% endif %}
+
+{% endblock %}

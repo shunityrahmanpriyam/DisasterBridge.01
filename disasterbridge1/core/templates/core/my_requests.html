@@ -1,82 +1,83 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}My Request - DisasterBridge{% endblock %}
+
+{% block content %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Requests - DisasterBridge</title>
-    <!-- Bootstrap 5 CSS -->
+
+    <!-- Bootstrap & Leaflet -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body style="background-color:#f9f9f9;">
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">DisasterBridge</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="/request-aid/">Request Help</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/my-requests/">My Requests</a></li>
-                    <li class="nav-item"><a class="nav-link text-white" href="/updates/">Updates</a></li>
-                    <li class="nav-item"><a class="btn btn-light btn-sm ms-2" href="/profile/">Profile</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Main Content -->
+
+    <!-- Requests Table -->
     <div class="container mt-5">
-        <h2 class="mb-4">📋 My Requests</h2>
+        <h2 class="mb-4 text-center">📋 My Requests</h2>
 
         {% if requests %}
-            <table class="table table-bordered table-striped shadow-sm">
-                <thead class="table-danger">
-                    <tr>
-                        <th>Request ID</th>
-                        <th>Location</th>
-                        <th>Category</th>
-                        <th>Urgency</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for req in requests %}
-                    <tr>
-                        <td>{{ req.pk }}</td>
-                        <td>{{ req.location }}</td>
-                        <td>{{ req.category }}</td>
-                        <td>
-                            {% if req.urgency == "High" %}
-                                <span class="badge bg-danger">High</span>
-                            {% elif req.urgency == "Medium" %}
-                                <span class="badge bg-warning text-dark">Medium</span>
-                            {% else %}
-                                <span class="badge bg-success">Low</span>
-                            {% endif %}
-                        </td>
-                        <td>{{ req.created_at|date:"Y-m-d H:i" }}</td>
-                        <td><span class="badge bg-secondary">Pending</span></td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% for req in requests %}
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5><strong>Request ID:</strong> {{ req.pk }}</h5>
+                        <p><strong>Location:</strong> {{ req.location }}</p>
+                        <p><strong>Category:</strong> {{ req.category }}</p>
+                        <p><strong>Urgency:</strong> {{ req.urgency }}</p>
+                        <p><strong>Date:</strong> {{ req.created_at|date:"Y-m-d H:i" }}</p>
+                        <p><strong>Status:</strong> {{ req.status }}</p>
+
+                        <div id="map_{{ req.pk }}" style="height:200px; border-radius:8px;"></div>
+                    </div>
+                </div>
+            {% endfor %}
         {% else %}
-            <div class="alert alert-info">
-                You have not submitted any requests yet.
-            </div>
+            <div class="alert alert-info text-center">No requests found.</div>
         {% endif %}
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center mt-5 py-3 bg-light border-top">
-        <p class="mb-0">&copy; 2025 DisasterBridge. All rights reserved.</p>
-        <small><a href="/about/">About</a> | <a href="/contact/">Contact</a> | <a href="/help/">Help/FAQ</a></small>
-    </footer>
 
-    <!-- Bootstrap JS -->
+
+    <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        {% for req in requests %}
+        (function() {
+            const containerId = "map_{{ req.pk }}";
+            const location = "{{ req.location|escapejs }}";
+            const map = L.map(containerId).setView([23.8103, 90.4125], 10);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${location}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const lat = data[0].lat;
+                        const lon = data[0].lon;
+                        L.marker([lat, lon]).addTo(map);
+                        map.setView([lat, lon], 12);
+                    }
+                });
+        })();
+        {% endfor %}
+    });
+    </script>
 </body>
 </html>
 
+{% endblock %}

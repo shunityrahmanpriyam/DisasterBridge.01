@@ -1,56 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Make a Donation</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #fdecec;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      width: 80%;
-      margin: 30px auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.2);
-    }
-    h2 {
-      text-align: center;
-      color: #c70039;
-    }
-    form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-    label {
-      font-weight: bold;
-    }
-    input, select, textarea, button {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-    button {
-      grid-column: span 2;
-      background: #c70039;
-      color: #fff;
-      font-size: 16px;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #900c3f;
-    }
-  </style>
-</head>
-<body>
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Donation - DisasterBridge{% endblock %}
+
+{% block content %}
+
+<style>
+
+
+
+
+</style>
   <div class="container">
     <h2>Make a Donation</h2>
     <form method="post">
@@ -104,5 +64,5 @@
       <button type="submit">Submit Donation</button>
     </form>
   </div>
-</body>
-</html>
+
+{% endblock %}

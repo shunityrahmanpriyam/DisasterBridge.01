@@ -1,0 +1,512 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}DisasterBridge{% endblock %}</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  
+  <style>
+    /* --- THEME COLORS & VARIABLES --- */
+    :root {
+      --db-accent-red: #e63946; /* Primary Red */
+      --db-darker-red: #c0313d; /* Hover/Active Red */
+      --db-brighter-red-hover: #ff4d4d; /* Specific hover color */
+      --db-page-bg: #ffecec; /* Very Light Pink */
+      --db-card-bg: white;
+      --db-text-dark: #1f2937; /* Dark Text Color */
+      --db-text-medium: #6c7a89;
+      --db-box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      --db-border-radius: 8px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--db-page-bg);
+      color: var(--db-text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container-lg {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    h1, h2, h3, h4 {
+        color: var(--db-text-dark);
+    }
+
+    /* --- NAVBAR STYLES --- */
+    nav {
+      background: var(--db-page-bg);
+      padding: 15px 20px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+    }
+
+    .navbar-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    /* Logo Styling */
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem; /* SYNCHRONIZED FONT SIZE */
+      color: var(--db-accent-red);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .logo img {
+      /* Height is now controlled by the inline style in HTML, but we keep the margin/display */
+      margin-right: 10px;
+      display: block;
+    }
+
+    .logo-disaster {
+        font-weight: 900;
+        color: var(--db-accent-red);
+    }
+    .logo-bridge {
+        font-weight: 500;
+        color: var(--db-accent-red);
+    }
+
+
+    /* Nav Link Styling */
+    .nav-links-container {
+      display: flex;
+      align-items: center;
+    }
+    .nav-link {
+        text-decoration: none;
+        color: var(--db-text-dark) !important;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.95rem;
+        margin: 0 12px;
+        padding: 8px 0;
+        border-bottom: 2px solid transparent;
+        transition: color 0.2s, border-bottom 0.2s;
+    }
+
+    .nav-link-active, .nav-link-active:hover {
+        color: var(--db-accent-red) !important;
+        border-bottom: 2px solid var(--db-accent-red);
+    }
+
+    .nav-link:hover {
+        color: var(--db-brighter-red-hover) !important;
+        border-bottom: 2px solid var(--db-brighter-red-hover);
+    }
+
+    /* Login/Logout Button Styling */
+    .btn-login {
+        background-color: var(--db-accent-red);
+        color: white !important;
+        border-radius: 8px;
+        padding: 8px 18px;
+        font-weight: 700;
+        border: none;
+        transition: background-color 0.2s, transform 0.2s;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.875rem;
+        margin-left: 12px;
+        cursor: pointer; /* Ensure the pointer shows for the logout action */
+    }
+    .btn-login:hover {
+        background-color: var(--db-darker-red);
+        color: white !important;
+        transform: none;
+    }
+
+    /* Rest of the section styles (hero, features, etc.) remain the same... */
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, var(--db-accent-red) 0%, #ff6b6b 100%);
+      color: white;
+      box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 15px;
+      font-weight: 900;
+      color: white;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      margin-bottom: 40px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 500;
+    }
+    .hero a {
+      background: white;
+      color: var(--db-accent-red);
+      padding: 12px 25px;
+      border-radius: var(--db-border-radius);
+      text-decoration: none;
+      font-weight: 700;
+      margin: 0 10px;
+      transition: background 0.3s ease, color 0.3s ease, transform 0.2s;
+    }
+    .hero a.donate-btn {
+        background: var(--db-darker-red);
+        color: white;
+        border: 2px solid white;
+    }
+    .hero a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    }
+    .hero a.donate-btn:hover {
+        background: white;
+        color: var(--db-darker-red);
+    }
+    .features {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 60px 20px;
+      background: var(--db-page-bg);
+      margin-top: -30px;
+      position: relative;
+    }
+    .feature {
+      width: 100%;
+      max-width: 350px;
+      text-align: center;
+      padding: 30px;
+      border-radius: var(--db-border-radius);
+      background: var(--db-card-bg);
+      box-shadow: var(--db-box-shadow);
+      border-top: 5px solid var(--db-accent-red);
+      transition: transform 0.3s;
+    }
+    .feature:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    .feature h3 {
+      color: var(--db-accent-red);
+      font-weight: 800;
+      margin-top: 10px;
+      font-size: 1.25rem;
+    }
+    .feature p {
+        color: var(--db-text-medium);
+        font-size: 0.95rem;
+    }
+    .how-it-works {
+      padding: 80px 20px 60px;
+      background: var(--db-card-bg);
+      text-align: center;
+    }
+    .how-it-works h2 {
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 40px;
+        color: var(--db-text-dark);
+    }
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .step {
+      width: 30%;
+      padding: 20px;
+      position: relative;
+    }
+    .step h4 {
+      color: var(--db-accent-red);
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .step p {
+        color: var(--db-text-medium);
+    }
+    .step::before {
+        content: attr(data-step);
+        display: block;
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 50%;
+        background-color: var(--db-accent-red);
+        color: white;
+        font-weight: 900;
+        margin: 0 auto 15px;
+        font-size: 1.2rem;
+        box-shadow: 0 3px 8px rgba(230, 57, 70, 0.4);
+    }
+    .step:not(:last-child)::after {
+        content: '\2192';
+        position: absolute;
+        right: -25px;
+        top: 25px;
+        font-size: 2rem;
+        color: var(--db-text-medium);
+        font-weight: 300;
+    }
+    .steps .step:nth-child(1)::before { content: '1'; }
+    .steps .step:nth-child(2)::before { content: '2'; }
+    .steps .step:nth-child(3)::before { content: '3'; }
+    .updates {
+      padding: 60px 20px;
+      background: var(--db-page-bg);
+    }
+    .updates h2 {
+      text-align: center;
+      margin-bottom: 40px;
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--db-accent-red);
+    }
+    .update-card {
+      background: var(--db-card-bg);
+      padding: 20px;
+      margin: 15px auto;
+      border-radius: var(--db-border-radius);
+      max-width: 800px;
+      box-shadow: var(--db-box-shadow);
+      border-left: 5px solid var(--db-accent-red);
+    }
+    .update-card h4 {
+        color: var(--db-text-dark);
+        margin-top: 0;
+        margin-bottom: 5px;
+        font-weight: 700;
+    }
+    .update-card p {
+        color: var(--db-text-medium);
+        margin: 0;
+        font-size: 0.9rem;
+    }
+    .cta {
+      text-align: center;
+      padding: 80px 20px;
+      background: var(--db-text-dark);
+      color: white;
+    }
+    .cta h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      font-weight: 900;
+      color: white;
+    }
+    .cta .hero-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    .cta a {
+      padding: 12px 30px;
+      border-radius: var(--db-border-radius);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .cta a:first-child {
+        background: var(--db-accent-red);
+        color: white;
+        border: 2px solid var(--db-accent-red);
+    }
+    .cta a.donate-btn {
+        background: transparent;
+        color: white;
+        border: 2px solid white;
+    }
+    .cta a:hover {
+        transform: translateY(-2px);
+    }
+    .cta a:first-child:hover {
+        background: var(--db-darker-red);
+        border-color: var(--db-darker-red);
+    }
+    .cta a.donate-btn:hover {
+        background: white;
+        color: var(--db-text-dark);
+    }
+    /* --- FOOTER STYLES --- */
+    footer {
+        background: var(--db-page-bg);
+        color: var(--db-text-dark);
+        text-align: center;
+        padding: 2rem 20px 1rem;
+        font-size: 0.9rem;
+        margin-top: auto; /* Push footer to the bottom */
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    footer p {
+      margin: 5px 0;
+      font-size: 0.8rem;
+    }
+    footer a {
+      color: var(--db-accent-red);
+      text-decoration: none;
+      margin: 0 8px;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+    .social-icon-link {
+        font-size: 1.2rem;
+        margin: 0 10px;
+    }
+    footer a:hover {
+      color: var(--db-brighter-red-hover);
+    }
+    footer p:last-child {
+        margin-top: 15px;
+    }
+
+    /* --- Mobile Responsiveness --- */
+    @media (max-width: 768px) {
+      nav {
+        padding: 12px 15px;
+      }
+      .nav-links-container {
+        display: none;
+      }
+      .logo {
+          font-size: 1.2rem; /* Adjusted for mobile view */
+      }
+      .logo img {
+          /* Override the max-height for mobile */
+          max-height: 32px !important;
+          height: auto;
+          margin-right: 6px; /* Adjusted margin */
+      }
+      .hero {
+        padding: 50px 15px;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero p {
+        font-size: 1rem;
+      }
+      .hero .hero-buttons a {
+        display: block;
+        width: 90%;
+        margin: 10px auto;
+        padding: 12px 15px;
+      }
+      .features {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        padding: 40px 15px;
+      }
+      .feature {
+        max-width: 100%;
+      }
+      .steps {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+      }
+      .step:not(:last-child)::after {
+        content: '\2193';
+        top: auto;
+        bottom: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .cta {
+          padding: 60px 15px;
+      }
+      .cta h2 {
+          font-size: 1.5rem;
+      }
+      .cta .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🔹 Navbar -->
+  <nav>
+    <div class="navbar-content">
+      <a class="logo" href="/">
+          <img src="{% static 'core/images/logo.png' %}" alt="DisasterBridge Logo"
+               onerror="this.onerror=null; this.src='https://placehold.co/60x60/e63946/ffffff?text=DB';"
+               style="max-height: 60px; width: auto;">
+          <span class="logo-disaster">Disaster</span><span class="logo-bridge">Bridge</span>
+      </a>
+
+      <div class="nav-links-container">
+        <a href="/" class="nav-link {% if request.resolver_match.url_name == 'home' %}nav-link-active{% endif %}">HOME</a>
+
+        <a href="/updates/" class="nav-link">UPDATES</a>
+
+        {% if user.is_authenticated %}
+
+            <a href="/profile/" class="nav-link">PROFILE</a>
+            <a href="{% url 'logout' %}" class="btn-login">LOGOUT</a>
+        {% else %}
+           <a href="{% url 'donationinfo' %}" class="nav-link">DONATE</a>
+            <a href="{% url 'signup' %}" class="nav-link">REQUEST HELP</a>
+            <a href="{% url 'login' %}" class="btn-login">SIGN IN/LOGIN</a>
+        {% endif %}
+
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- 🔹 Main Content Block -->
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+
+  <!-- 🔹 Footer -->
+  <footer>
+    <div class="container-lg">
+        <div class="mb-3">
+            <a href="{% url 'about' %}">ABOUT</a> |
+            <a href="{% url 'contact' %}">CONTACT INFO</a> |
+            <a href="{% url 'faq' %}">HELP/FAQ</a>
+        </div>
+
+        <div class="mb-3">
+            <a href="https://facebook.com/disasterbridge" target="_blank"><i class="bi bi-facebook"></i></a>
+            <a href="https://instagram.com/disasterbridge" target="_blank"><i class="bi bi-instagram"></i></a>
+            <a href="https://twitter.com/disasterbridge" target="_blank"><i class="bi bi-twitter"></i></a>
+            <a href="https://linkedin.com/company/disasterbridge" target="_blank"><i class="bi bi-linkedin"></i></a>
+        </div>
+
+        <p style="color: var(--db-text-medium);">
+            &copy; 2025 DisasterBridge. All rights reserved.<br>
+            <a href="{% url 'privacy' %}">Privacy Policy</a> | <a href="{% url 'terms' %}">Terms of Service</a>
+        </p>
+    </div>
+  </footer>
+</body>
+</html>

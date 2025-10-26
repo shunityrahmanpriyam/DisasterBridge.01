@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import User, AidRequest,  Feedback,  VolunteerAssignment
 
@@ -42,7 +43,7 @@ def aidrequest_list(request):
 # ==== DONATION ====
 def donation_list(request):
     donations = Donation.objects.all()
-    return render(request, "core/donatenow.html", {"donations": donations})
+    return render(request, "core/donation_list.html", {"donations": donations})
 
 
 # ==== FEEDBACK ====
@@ -53,18 +54,18 @@ def feedback_list(request):
 
 # ==== NOTIFICATION ====
 def is_admin(user):
-    return user.is_authenticated and user.role == 'Admin'
+    return user.is_authenticated and user.role == 'admin'
 
 @login_required
 def notification_list(request):
-    if request.user.role == "Admin":
-
-        notifications = Notification.objects.all().order_by("-timestamp")
+    user = request.user
+    if user.role == "admin":
+        notifications = Notification.objects.all().order_by('-timestamp')
     else:
+        notifications = Notification.objects.filter(user=user).order_by('-timestamp')
 
-        notifications = Notification.objects.filter(user=request.user).order_by("-timestamp")
+    return render(request, 'core/notification_list.html', {'notifications': notifications})
 
-    return render(request, "core/notification_list.html", {"notifications": notifications})
 
 
 @login_required
@@ -77,7 +78,7 @@ def add_notification(request):
 
         from django.contrib.auth import get_user_model
         User = get_user_model()
-        users = User.objects.exclude(role="Admin")
+        users = User.objects.exclude(role="admin")
         for u in users:
             Notification.objects.create(user=u, message=message, type=notif_type)
 
@@ -94,11 +95,49 @@ def delete_notification(request, notif_id):
 
 
 @login_required
-def mark_as_read(request, notif_id):
-    notif = get_object_or_404(Notification, notification_id=notif_id, user=request.user)
-    notif.status = "read"
-    notif.save()
-    return redirect("notification_list")
+def mark_as_read(request, notification_id):
+    n = get_object_or_404(Notification, notification_id=notification_id, user=request.user)
+    n.status = 'read'
+    n.save()
+    return redirect('notification_list')
+
+@login_required
+def approve_notification(request, notification_id):
+    if request.user.role != "admin":
+        return redirect('notification_list')
+    n = get_object_or_404(Notification, notification_id=notification_id)
+    n.action_status = 'approved'
+    n.status = 'read'
+    n.save()
+
+    # Send feedback notification to user
+    Notification.objects.create(
+        user=n.user,
+        type=n.type,
+        message=f"Your {n.type.lower()} has been approved by admin.",
+        status='unread'
+    )
+    return redirect('notification_list')
+
+
+@login_required
+def deny_notification(request, notification_id):
+    if request.user.role != "admin":
+        return redirect('notification_list')
+    n = get_object_or_404(Notification, notification_id=notification_id)
+    n.action_status = 'denied'
+    n.status = 'read'
+    n.save()
+
+    Notification.objects.create(
+        user=n.user,
+        type=n.type,
+        message=f"Your {n.type.lower()} has been denied by admin.",
+        status='unread'
+    )
+    return redirect('notification_list')
+
+
 
 # ==== VOLUNTEER ASSIGNMENT ====
 def volunteerassignment_list(request):
@@ -168,18 +207,19 @@ def faq_page(request):
 
 @login_required
 def user_profile(request):
-    user = request.user  # current logged-in user
+    user = request.user
 
-    # Get notifications
-    if user.role == "Admin":
-        notifications = Notification.objects.all().order_by("-timestamp")
-    else:
-        notifications = Notification.objects.filter(user=user).order_by("-timestamp")
+    if request.method == "POST":
+        # Update editable fields only
+        user.name = request.POST.get("name", user.name)
+        user.phone_number = request.POST.get("phone_number", user.phone_number)
+        user.language_preference = request.POST.get("language_preference", user.language_preference)
 
-    return render(request, "core/user_profile.html", {
-        "user": user,
-        "notifications": notifications
-    })
+        user.save()  # Save changes to DB
+        messages.success(request, "Profile updated successfully!")
+        return redirect("user_profile")  # Refresh the page
+
+    return render(request, "core/user_profile.html", {"user": user})
 
 
 def change_language(request):
@@ -198,19 +238,22 @@ def change_language(request):
 def dashboard(request):
     user = request.user
 
-    # role wise template select
     if user.role == "admin":
         template = "core/dashboard_admin.html"
     elif user.role == "donor":
         template = "core/dashboard_donor.html"
     elif user.role == "volunteer":
         template = "core/dashboard_volunteer.html"
+        assigned_requests = AidRequest.objects.filter(assigned_volunteer=user)
+        context = {"user": user, "assigned_requests": assigned_requests}
+        return render(request, template, context)
     elif user.role == "victim":
         template = "core/dashboard_victim.html"
     else:
         template = "core/dashboard_default.html"
 
     return render(request, template, {"user": user})
+
 
 
 @login_required
@@ -226,6 +269,17 @@ def make_donation(request):
             donation.receipt_number = f"DR-{today}-{Donation.objects.count()+1:04d}"
 
             donation.save()
+            # ✅ Notify Admin automatically
+            admin_user = User.objects.filter(role="admin").first()
+            if admin_user:
+                Notification.objects.create(
+                    user=admin_user,
+                    type='Donation',
+                    message=f"New donation submitted by {request.user.username} for review.",
+                    status='unread'
+                )
+
+            messages.success(request, "Donation submitted successfully!")
             return redirect('donation_history')
     else:
         form = DonationForm()
@@ -245,8 +299,19 @@ def request_aid(request):
             aid_request = form.save(commit=False)
             aid_request.user = request.user
             aid_request.save()
+
+            # ✅ Automatically notify Admin
+            admin_user = User.objects.filter(role="admin").first()
+            if admin_user:
+                Notification.objects.create(
+                    user=admin_user,
+                    type='Aid Request',
+                    message=f"New aid request submitted by {request.user.name} for review.",
+                    status='unread'
+                )
+
             messages.success(request, f"Your request has been submitted! Request ID: {aid_request.request_id}")
-            return redirect("my_requests")  # তোমার My Requests পেজে যাবে
+            return redirect("my_requests")
     else:
         form = AidRequestForm()
     return render(request, "core/request_aid.html", {"form": form})
@@ -280,3 +345,33 @@ def privacy_policy(request):
 
 def terms_of_service(request):
     return render(request, "core/terms.html")
+
+
+@login_required
+def assigned_requests(request):
+    if request.user.role != "volunteer":
+        return redirect('home')
+
+    requests = AidRequest.objects.filter(assigned_volunteer=request.user)
+    return render(request, 'core/volunteer_assigned_requests.html', {'requests': requests})
+
+
+@login_required
+def update_request_status(request, pk):
+    req = get_object_or_404(AidRequest, pk=pk, assigned_volunteer=request.user)
+
+    if request.method == "POST":
+        new_status = request.POST.get("status")
+        req.status = new_status
+        req.save()
+        messages.success(request, "Status updated successfully!")
+        return redirect('assigned_requests')
+
+    return render(request, 'core/update_request_status.html', {'req': req})
+
+@login_required
+def help_page(request):
+    user = request.user
+    role = user.role if hasattr(user, "role") else "guest"
+
+    return render(request, "core/user_help.html", {"role": role})

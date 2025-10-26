@@ -1,4 +1,11 @@
+{% extends 'core/base.html' %}
 {% load static %}
+
+{% block title %}Privacy - DisasterBridge{% endblock %}
+
+{% block content %}
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -244,28 +251,28 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav>
-    <div class="navbar-content">
-        <!-- Logo link -->
-        <a class="logo" href="/">
-            <img src="{% static 'core/images/logo.png' %}"
-                 alt="DisasterBridge Logo"
-                 onerror="this.onerror=null; this.src='https://placehold.co/60x60/e63946/ffffff?text=DB';"
-                 style="max-height: 60px; width: auto;">
-            <span class="logo-disaster">Disaster</span><span class="logo-bridge">Bridge</span>
-        </a>
+<!--  &lt;!&ndash; Navbar &ndash;&gt;-->
+<!--  <nav>-->
+<!--    <div class="navbar-content">-->
+<!--        &lt;!&ndash; Logo link &ndash;&gt;-->
+<!--        <a class="logo" href="/">-->
+<!--            <img src="{% static 'core/images/logo.png' %}"-->
+<!--                 alt="DisasterBridge Logo"-->
+<!--                 onerror="this.onerror=null; this.src='https://placehold.co/60x60/e63946/ffffff?text=DB';"-->
+<!--                 style="max-height: 60px; width: auto;">-->
+<!--            <span class="logo-disaster">Disaster</span><span class="logo-bridge">Bridge</span>-->
+<!--        </a>-->
 
-        <!-- Links container -->
-        <div class="nav-links-container">
-            <a href="/" class="nav-link">HOME</a>
-            <a href="/signup/" class="nav-link" id="request-help-link">REQUEST HELP</a>
-            <a href="/donationinfo/" class="nav-link">DONATE</a>
-            <a href="/updates/" class="nav-link">UPDATES</a>
-            <a href="/login/" class="btn-login" id="login-logout-btn">SIGN IN/ LOGIN</a>
-        </div>
-    </div>
-  </nav>
+<!--        &lt;!&ndash; Links container &ndash;&gt;-->
+<!--        <div class="nav-links-container">-->
+<!--            <a href="/" class="nav-link">HOME</a>-->
+<!--            <a href="/signup/" class="nav-link" id="request-help-link">REQUEST HELP</a>-->
+<!--            <a href="/donationinfo/" class="nav-link">DONATE</a>-->
+<!--            <a href="/updates/" class="nav-link">UPDATES</a>-->
+<!--            <a href="/login/" class="btn-login" id="login-logout-btn">SIGN IN/ LOGIN</a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--  </nav>-->
   
   <div class="container-lg">
       <!-- Policy Content Section -->
@@ -332,31 +339,31 @@
       </section>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container-lg">
-        <!-- Navigation Buttons -->
-        <div class="mb-3">
-            <a href="{% url 'about' %}" class="footer-btn">ABOUT</a> |
-            <a href="{% url 'contact' %}" class="footer-btn">CONTACT INFO</a> |
-            <a href="{% url 'faq' %}" class="footer-btn">HELP/FAQ</a>
-        </div>
+<!--  &lt;!&ndash; Footer &ndash;&gt;-->
+<!--  <footer>-->
+<!--    <div class="container-lg">-->
+<!--        &lt;!&ndash; Navigation Buttons &ndash;&gt;-->
+<!--        <div class="mb-3">-->
+<!--            <a href="{% url 'about' %}" class="footer-btn">ABOUT</a> |-->
+<!--            <a href="{% url 'contact' %}" class="footer-btn">CONTACT INFO</a> |-->
+<!--            <a href="{% url 'faq' %}" class="footer-btn">HELP/FAQ</a>-->
+<!--        </div>-->
 
-        <!-- Social Media Buttons -->
-        <div class="mb-3">
-            <a href="https://facebook.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-            <a href="https://instagram.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-            <a href="https://twitter.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-            <a href="https://linkedin.com/company/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-        </div>
+<!--        &lt;!&ndash; Social Media Buttons &ndash;&gt;-->
+<!--        <div class="mb-3">-->
+<!--            <a href="https://facebook.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Facebook"><i class="bi bi-facebook"></i></a>-->
+<!--            <a href="https://instagram.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Instagram"><i class="bi bi-instagram"></i></a>-->
+<!--            <a href="https://twitter.com/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="Twitter"><i class="bi bi-twitter"></i></a>-->
+<!--            <a href="https://linkedin.com/company/disasterbridge" target="_blank" class="social-link social-icon-link" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>-->
+<!--        </div>-->
 
-        <!-- Legal -->
-        <p class="text-muted small mb-0" style="color: var(--db-text-medium);">
-            &copy; 2025 DisasterBridge. All rights reserved. <br>
-            <a href="{% url 'privacy' %}" class="text-danger">Privacy Policy</a> | <a href="{% url 'terms' %}" class="text-danger">Terms of Service</a>
-        </p>
-    </div>
-  </footer>
+<!--        &lt;!&ndash; Legal &ndash;&gt;-->
+<!--        <p class="text-muted small mb-0" style="color: var(&#45;&#45;db-text-medium);">-->
+<!--            &copy; 2025 DisasterBridge. All rights reserved. <br>-->
+<!--            <a href="{% url 'privacy' %}" class="text-danger">Privacy Policy</a> | <a href="{% url 'terms' %}" class="text-danger">Terms of Service</a>-->
+<!--        </p>-->
+<!--    </div>-->
+<!--  </footer>-->
 
   <!-- Firebase SDKs are included for completeness, even if not strictly needed on this static page -->
   <script type="module">
@@ -420,3 +427,4 @@
   </script>
 </body>
 </html>
+{% endblock %}
